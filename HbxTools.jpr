@@ -1,0 +1,950 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<jpr:project xmlns:jpr="http://xmlns.oracle.com/ide/project">
+   <hash n="component-versions">
+      <value n="oracle.adfdt.controller.adfc.source.migration.AdfControllerSchemaMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.adfdt.controller.common.migrator.ProjectMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.adfdt.controller.jsf2.diagram.migrate.JsfNodeMigratorHelper" v="11.1.1.1.0"/>
+      <value n="oracle.adfdt.controller.migrate.TrinidadDatabindingsProjectMigrator" v="11.1.2.0.0"/>
+      <value n="oracle.adfdtinternal.dvt.datapresdt.migration.DVTDataMapMigrator" v="11.1.1.1.0.3"/>
+      <value n="oracle.adfdtinternal.dvt.datapresdt.migration.DVTWebAppConfigurationMigrator" v="12.1.3.0.0"/>
+      <value n="oracle.adfdtinternal.model.ide.migration.ProjectMigrator" v="11.1.1.1.0.11.1.1"/>
+      <value n="oracle.adfdtinternal.model.ide.placeholderdc.migrator.PlaceholderProjectMigrator" v="12.1.4.0.0"/>
+      <value n="oracle.adfdtinternal.model.ide.security.wizard.FormPageMigrator" v="11.1.1.0.0"/>
+      <value n="oracle.adfdtinternal.model.ide.security.wizard.JpsFilterMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.adfdtinternal.model.ide.xmled.migration.ADFNodeMigrator" v="11.1.1.1.0.5"/>
+      <value n="oracle.adfdtinternal.model.ide.xmled.migration.PageDefinitionParameterValueMigrator" v="11.1.1.1.0.5"/>
+      <value n="oracle.adfdtinternal.model.ide.xmled.migration.RestDataControlMigrator" v="12.1.4.0.0"/>
+      <value n="oracle.adfdtinternal.model.ide.xmled.migration.WebXmlMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.adfdtinternal.view.common.migration.wizards.MigrationHelper" v="11.1.1.1.0.3"/>
+      <value n="oracle.adfdtinternal.view.rich.binding.migration.JarResourceMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.adfdtinternal.view.rich.migration.ComponentIdNodeMigratorHelper" v="11.1.1.1.0.01"/>
+      <value n="oracle.adfdtinternal.view.rich.migration.FacesLibraryVersionMigrator" v="11.1.1.1.0.1"/>
+      <value n="oracle.adfmf.framework.dt.migration.ApplicationMigrator" v="12.2.1.0.0.2.3.2.0.0"/>
+      <value n="oracle.ide.model.Project" v="12.2.1.0.0"/>
+      <value n="oracle.ide.model.ResourcePathsMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.ideimpl.model.TechnologyScopeUpdateMigrator" v="11.1.2.0.0.6"/>
+      <value n="oracle.jbo.dt.jclient.migrator.JCProjectMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.jbo.dt.jdevx.deployment.JbdProjectMigrator" v="11.1.2.0.0"/>
+      <value n="oracle.jbo.dt.jdevx.ui.appnav.APAdfConfigMigrator" v="11.1.2.0.0"/>
+      <value n="oracle.jbo.dt.jdevx.ui.appnav.APProjectMigrator" v="11.1.1.0.1.5"/>
+      <value n="oracle.jbo.dt.migrate.ResourceBundlePathMigrator" v="11.1.1.0.1.5"/>
+      <value n="oracle.jbo.dt.migration.ServiceInterfaceMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.jdeveloper.dbmodeler.Migration" v="12.1.1.0.0"/>
+      <value n="oracle.jdeveloper.ejb.EjbMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.jdeveloper.library.ProjectLibraryMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.jdeveloper.maven.migrator.POMNodeMigrator" v="12.2.1.0.0"/>
+      <value n="oracle.jdeveloper.model.OutputDirectoryMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.jdevimpl.deploy.jps.JpsDataMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.jdevimpl.deploy.migrators.DeploymentMigrator" v="12.1.2.0.1"/>
+      <value n="oracle.jdevimpl.jsp.JspMigrator" v="11.1.1"/>
+      <value n="oracle.jdevimpl.offlinedb.migration.OfflineDBProjectMigrator" v="12.1.1.0.0"/>
+      <value n="oracle.jdevimpl.offlinedb.migration.SXMLOfflineDBProjectMigrator" v="12.1.4.0.0"/>
+      <value n="oracle.jdevimpl.resourcebundle.XliffAddin$XliffMigratorHelper" v="11.1.1.1.0"/>
+      <value n="oracle.jdevimpl.webapp.facelets.libraries.FaceletsLibraryMigrator" v="12.2.1.0.0"/>
+      <value n="oracle.jdevimpl.webapp.jsp.libraries.JspLibraryMigrator" v="12.1.4.0.0"/>
+      <value n="oracle.jdevimpl.webapp.jsp.taglibraries.trinidad.migration.TrinidadLibraryVersionMigrator" v="11.1.1.1.0.1"/>
+      <value n="oracle.jdevimpl.webapp.WebAppContentSetNodeMigratorHelper" v="11.1.1"/>
+      <value n="oracle.jdevimpl.webapp.WebAppProjectNodeMigratorHelper" v="12.2.1.0.0"/>
+      <value n="oracle.jdevimpl.webservices.rest.migration.RestAppClassMigrator" v="12.1.3.0.0"/>
+      <value n="oracle.jdevimpl.webservices.rest.migration.RestJerseyLibMigrator" v="12.1.3.0.0"/>
+      <value n="oracle.jdevimpl.webservices.rest.migration.RestLibraryMigrator" v="12.1.1.0.0"/>
+      <value n="oracle.jdevimpl.webservices.rest.migration.RestOwsmPolicyMigrator" v="12.1.3.0.0"/>
+      <value n="oracle.jdevimpl.webservices.rest.migration.RestPathMigrator" v="11.1.2.0.0"/>
+      <value n="oracle.jdevimpl.webservices.rest.migration.RestWebAppMigrator" v="12.1.3.0.0"/>
+      <value n="oracle.jdevimpl.webservices.rest.migration.RestWeblogicWebAppMigrator" v="12.1.3.0.0"/>
+      <value n="oracle.jdevimpl.webservices.WebServicesMigratorHelper" v="11.1.1.1.0"/>
+      <value n="oracle.jdevimpl.xml.wl.WeblogicMigratorHelper" v="11.1.1.1.0"/>
+      <value n="oracle.modeler.bmmigrate.management.Migration" v="11.1.1.1.0"/>
+      <value n="oracle.sb.tooling.ide.libs.SbProjectMigrator" v="12.1.4.0.0"/>
+      <value n="oracle.tip.tools.ide.fabric.addin.SCAProjectMigrator" v="11.1.1.1.0.13"/>
+      <value n="oracle.tip.tools.ide.workflow.addin.TaskFormMigratorAddin" v="12.1.3.0.0"/>
+      <value n="oracle.toplink.workbench.addin.migration.PersistenceProjectMigrator" v="11.1.1.1.0"/>
+      <value n="oracle.toplink.workbench.addin.migration.TopLinkProjectMigrator" v="11.1.1.1.0"/>
+   </hash>
+   <list n="contentSets">
+      <string v="oracle.jdeveloper.model.PathsConfiguration/javaContentSet"/>
+      <string v="oracle.ide.model.ResourcePaths/resourcesContentSet"/>
+      <string v="oracle.mds.internal.dt.ide.MDSLibraryCustCSProvider/mdsContentSet"/>
+      <string v="oracle.mds.internal.dt.ide.MDSADFLibVirtualNodeCSProvider/mdsLibVirtualNodeContentSet"/>
+      <string v="oracle.jdeveloper.model.J2eeSettings/webContentSet"/>
+      <string v="oracle.jdeveloper.offlinedb.model.OfflineDBProjectSettings/offlineDBContentSet"/>
+      <string v="oracle.adfdtinternal.model.ide.settings.ADFMSettings/adfmContentSet"/>
+      <string v="oracle.bm.commonIde.data.project.ModelerProjectSettings/modelersContentSet"/>
+      <string v="oracle.tip.tools.ide.fabric.addin.SCAContentSetProvider/sca-content"/>
+      <string v="oracle.toplink.workbench.addin/toplinkContentSet"/>
+      <string v="oracle.bpm.fusion.studio.BPMProjectSettings/bpmProjectsProcessesContentSet"/>
+      <string v="oracle.sb.tooling.ide.core.projects.SbProjectSettings/sbContentSet"/>
+      <string v="oracle.tip.tools.ide.ess.addin.ESSContentSetProvider/ess-content"/>
+      <string v="oracle.jdeveloper.model.PathsConfiguration/cepContentSet"/>
+   </list>
+   <value n="defaultPackage" v="es.handbox"/>
+   <hash n="oracle.ide.model.TechnologyScopeConfiguration">
+      <list n="technologyScope">
+         <string v="HTML"/>
+         <string v="JAVASCRIPT"/>
+         <string v="JSP"/>
+         <string v="Java"/>
+         <string v="RESTWebServices"/>
+         <string v="XML"/>
+      </list>
+   </hash>
+   <hash n="oracle.jdeveloper.compiler.OjcConfiguration">
+      <value n="webIANAEncoding" v="windows-1252"/>
+   </hash>
+   <hash n="oracle.jdeveloper.deploy.dt.DeploymentProfiles">
+      <hash n="profileDefinitions">
+         <hash n="hbxtools">
+            <hash n="appletArchives"/>
+            <hash n="appletFiles">
+               <value n="autoInclude" v="true"/>
+               <list n="selectionFilters">
+                  <string v="oracle.jdevimpl.deploy.common.JavaSelectionFilter"/>
+               </list>
+            </hash>
+            <hash n="archiveOptions">
+               <value n="hasManifest" v="false"/>
+            </hash>
+            <value n="enterpriseAppName" v="hbxtools"/>
+            <hash n="fileGroups">
+               <list n="groups">
+                  <hash>
+                     <list n="contributors">
+                        <hash>
+                           <value n="type" v="5"/>
+                        </hash>
+                     </list>
+                     <value n="displayName" v="Web Files"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="pattern" v="**"/>
+                              <value n="type" v="0"/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="internalName" v="web-files"/>
+                     <value n="type" v="1"/>
+                  </hash>
+                  <hash>
+                     <list n="contributors">
+                        <hash>
+                           <value n="type" v="2"/>
+                        </hash>
+                        <hash>
+                           <value n="type" v="7"/>
+                        </hash>
+                     </list>
+                     <value n="displayName" v="WEB-INF/classes"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="pattern" v="**"/>
+                              <value n="type" v="0"/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="internalName" v="project-output"/>
+                     <value n="targetWithinJar" v="WEB-INF/classes"/>
+                     <value n="type" v="1"/>
+                  </hash>
+                  <hash>
+                     <value n="displayName" v="WEB-INF/lib"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="pattern" v="**"/>
+                              <value n="type" v="0"/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="internalName" v="libraries"/>
+                     <value n="targetWithinJar" v="WEB-INF/lib"/>
+                     <value n="type" v="3"/>
+                  </hash>
+               </list>
+            </hash>
+            <url n="jarURL" path="hbxtools.war"/>
+            <value n="profileClass" v="oracle.jdeveloper.deploy.war.WarProfile"/>
+            <value n="profileName" v="hbxtools"/>
+         </hash>
+         <hash n="HbxToolsCommandLine">
+            <hash n="archiveOptions">
+               <value n="hasManifest" v="true"/>
+            </hash>
+            <hash n="fileGroups">
+               <list n="groups">
+                  <hash>
+                     <list n="contributors">
+                        <hash>
+                           <value n="type" v="2"/>
+                        </hash>
+                        <hash>
+                           <value n="type" v="7"/>
+                        </hash>
+                     </list>
+                     <value n="displayName" v="Project Output"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="pattern" v="es/handbox/tools/Test.class"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="es/handbox/tools/GenericApplication.class"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="es/handbox/tools/FeedTools.class"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="es/handbox/tools/BloggerTools.class"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="es/handbox/tools/callable/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="**"/>
+                              <value n="type" v="0"/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="internalName" v="project-output"/>
+                     <value n="type" v="1"/>
+                  </hash>
+               </list>
+            </hash>
+            <url n="jarURL" path="deploy2/HbxToolsCommandLine.jar"/>
+            <hash n="libraryDependencies">
+               <list n="unselectedLibraries">
+                  <string v="JSP Runtime"/>
+                  <string v="Javax.mail-1.5.5.jar"/>
+                  <string v="Gson-2.6.2.jar"/>
+                  <string v="Javax.servlet.javax.servlet-api.jar"/>
+                  <string v="Javax.servlet.jsp.javax.servlet.jsp-api.jar"/>
+                  <string v="Org.glassfish.javax.el.jar"/>
+                  <string v="Javax.annotation.javax.annotation-api.jar"/>
+                  <string v="Javax.inject.javax.inject.jar"/>
+                  <string v="Javax.ws.rs.javax.ws.rs-api.jar"/>
+                  <string v="Org.glassfish.jersey.bundles.repackaged.jersey-guava.jar"/>
+                  <string v="Org.glassfish.jersey.containers.jersey-container-servlet-core.jar"/>
+                  <string v="Org.glassfish.jersey.containers.jersey-container-servlet.jar"/>
+                  <string v="Org.glassfish.jersey.core.jersey-client.jar"/>
+                  <string v="Org.glassfish.jersey.core.jersey-common.jar"/>
+                  <string v="Org.glassfish.jersey.core.jersey-server.jar"/>
+                  <string v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-servlet.jar"/>
+                  <string v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-transaction.jar"/>
+                  <string v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x.jar"/>
+                  <string v="Org.glassfish.jersey.ext.jersey-bean-validation.jar"/>
+                  <string v="Org.glassfish.jersey.ext.jersey-entity-filtering.jar"/>
+                  <string v="Org.glassfish.jersey.media.jersey-media-jaxb.jar"/>
+                  <string v="Org.glassfish.jersey.media.jersey-media-json-jackson.jar"/>
+                  <string v="Org.glassfish.jersey.media.jersey-media-json-jackson1.jar"/>
+                  <string v="Org.glassfish.jersey.media.jersey-media-json-jettison.jar"/>
+                  <string v="Org.glassfish.jersey.media.jersey-media-json-processing.jar"/>
+                  <string v="Org.glassfish.jersey.media.jersey-media-moxy.jar"/>
+                  <string v="Org.glassfish.jersey.media.jersey-media-multipart.jar"/>
+                  <string v="Org.glassfish.jersey.media.jersey-media-sse.jar"/>
+                  <string v="Javax.enterprise.cdi-api.jar"/>
+                  <string v="Org.glassfish.hk2.osgi-resource-locator.jar"/>
+                  <string v="Org.glassfish.hk2.hk2-api.jar"/>
+                  <string v="Org.glassfish.hk2.hk2-utils.jar"/>
+               </list>
+            </hash>
+            <value n="profileClass" v="oracle.jdeveloper.deploy.jar.ArchiveProfile"/>
+            <value n="profileName" v="HbxToolsCommandLine"/>
+         </hash>
+         <hash n="webapp">
+            <hash n="appletArchives"/>
+            <hash n="appletFiles">
+               <value n="autoInclude" v="true"/>
+               <list n="selectionFilters">
+                  <string v="oracle.jdevimpl.deploy.common.JavaSelectionFilter"/>
+               </list>
+            </hash>
+            <hash n="archiveOptions">
+               <value n="hasManifest" v="false"/>
+            </hash>
+            <value n="enterpriseAppName" v="webapp"/>
+            <hash n="fileGroups">
+               <list n="groups">
+                  <hash>
+                     <list n="contributors">
+                        <hash>
+                           <value n="type" v="5"/>
+                        </hash>
+                     </list>
+                     <value n="displayName" v="Web Files"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="pattern" v="**"/>
+                              <value n="type" v="0"/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="internalName" v="web-files"/>
+                     <value n="type" v="1"/>
+                  </hash>
+                  <hash>
+                     <list n="contributors">
+                        <hash>
+                           <value n="type" v="2"/>
+                        </hash>
+                        <hash>
+                           <value n="type" v="7"/>
+                        </hash>
+                     </list>
+                     <value n="displayName" v="WEB-INF/classes"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="pattern" v="**"/>
+                              <value n="type" v="0"/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="internalName" v="project-output"/>
+                     <value n="targetWithinJar" v="WEB-INF/classes"/>
+                     <value n="type" v="1"/>
+                  </hash>
+                  <hash>
+                     <value n="displayName" v="WEB-INF/lib"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="pattern" v="**"/>
+                              <value n="type" v="0"/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="internalName" v="libraries"/>
+                     <value n="targetWithinJar" v="WEB-INF/lib"/>
+                     <value n="type" v="3"/>
+                  </hash>
+               </list>
+            </hash>
+            <url n="jarURL" path="deploy/webapp.war"/>
+            <value n="profileClass" v="oracle.jdeveloper.deploy.war.WarProfile"/>
+            <value n="profileName" v="webapp"/>
+         </hash>
+      </hash>
+      <list n="profileList">
+         <string v="hbxtools"/>
+         <string v="HbxToolsCommandLine"/>
+         <string v="webapp"/>
+      </list>
+   </hash>
+   <hash n="oracle.jdeveloper.model.J2eeSettings">
+      <value n="j2eeWebAppName" v="HbxTools"/>
+      <value n="j2eeWebContextRoot" v="hbxtools"/>
+   </hash>
+   <hash n="oracle.jdeveloper.model.PathsConfiguration">
+      <hash n="javaContentSet">
+         <list n="pattern-filters">
+            <string v="+**"/>
+         </list>
+         <list n="url-path">
+            <url path="src/"/>
+         </list>
+      </hash>
+   </hash>
+   <hash n="oracle.jdeveloper.runner.RunConfigurations">
+      <hash n="runConfigurationDefinitions">
+         <hash n="Default">
+            <value n="custom" v="false"/>
+            <value n="javaOptions" v="-Dweblogic.client.socket.ConnectTimeout=60000"/>
+            <value n="name" v="Default"/>
+            <url n="runDirectoryURL" path="."/>
+            <value n="targetURL"/>
+         </hash>
+      </hash>
+   </hash>
+   <hash n="oracle.jdevimpl.config.JProjectLibraries">
+      <list n="exportedReferences">
+         <hash>
+            <value n="id" v="JSP Runtime"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.mail-1.5.5.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Mariadb-java-client-1.1.8.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Serialized-php-parser-0.3.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Gson-2.6.2.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.servlet.javax.servlet-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.servlet.jsp.javax.servlet.jsp-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.javax.el.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.annotation.javax.annotation-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.inject.javax.inject.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.ws.rs.javax.ws.rs-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.bundles.repackaged.jersey-guava.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.containers.jersey-container-servlet-core.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.containers.jersey-container-servlet.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.core.jersey-client.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.core.jersey-common.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.core.jersey-server.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-servlet.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-transaction.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.jersey-bean-validation.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.jersey-entity-filtering.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-jaxb.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-jackson.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-jackson1.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-jettison.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-processing.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-moxy.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-multipart.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-sse.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.enterprise.cdi-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.hk2.osgi-resource-locator.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.hk2.hk2-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.hk2.hk2-utils.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+      </list>
+      <hash n="internalDefinitions">
+         <list n="libraryDefinitions">
+            <hash>
+               <list n="classPath">
+                  <url path="../lib/javax.mail-1.5.5.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Javax.mail-1.5.5.jar"/>
+               <value n="id" v="Javax.mail-1.5.5.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../lib/mariadb-java-client-1.1.8.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Mariadb-java-client-1.1.8.jar"/>
+               <value n="id" v="Mariadb-java-client-1.1.8.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../lib/serialized-php-parser-0.3.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Serialized-php-parser-0.3.jar"/>
+               <value n="id" v="Serialized-php-parser-0.3.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../lib/gson-2.6.2.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Gson-2.6.2.jar"/>
+               <value n="id" v="Gson-2.6.2.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../lib/javax.servlet.javax.servlet-api.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Javax.servlet.javax.servlet-api.jar"/>
+               <value n="id" v="Javax.servlet.javax.servlet-api.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../lib/javax.servlet.jsp.javax.servlet.jsp-api.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Javax.servlet.jsp.javax.servlet.jsp-api.jar"/>
+               <value n="id" v="Javax.servlet.jsp.javax.servlet.jsp-api.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../lib/org.glassfish.javax.el.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.javax.el.jar"/>
+               <value n="id" v="Org.glassfish.javax.el.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/javax.annotation.javax.annotation-api.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Javax.annotation.javax.annotation-api.jar"/>
+               <value n="id" v="Javax.annotation.javax.annotation-api.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/javax.inject.javax.inject.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Javax.inject.javax.inject.jar"/>
+               <value n="id" v="Javax.inject.javax.inject.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/javax.ws.rs.javax.ws.rs-api.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Javax.ws.rs.javax.ws.rs-api.jar"/>
+               <value n="id" v="Javax.ws.rs.javax.ws.rs-api.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.bundles.repackaged.jersey-guava.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.bundles.repackaged.jersey-guava.jar"/>
+               <value n="id" v="Org.glassfish.jersey.bundles.repackaged.jersey-guava.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.containers.jersey-container-servlet-core.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.containers.jersey-container-servlet-core.jar"/>
+               <value n="id" v="Org.glassfish.jersey.containers.jersey-container-servlet-core.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.containers.jersey-container-servlet.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.containers.jersey-container-servlet.jar"/>
+               <value n="id" v="Org.glassfish.jersey.containers.jersey-container-servlet.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.core.jersey-client.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.core.jersey-client.jar"/>
+               <value n="id" v="Org.glassfish.jersey.core.jersey-client.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.core.jersey-common.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.core.jersey-common.jar"/>
+               <value n="id" v="Org.glassfish.jersey.core.jersey-common.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.core.jersey-server.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.core.jersey-server.jar"/>
+               <value n="id" v="Org.glassfish.jersey.core.jersey-server.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.ext.cdi.jersey-cdi1x-servlet.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-servlet.jar"/>
+               <value n="id" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-servlet.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.ext.cdi.jersey-cdi1x-transaction.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-transaction.jar"/>
+               <value n="id" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-transaction.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.ext.cdi.jersey-cdi1x.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x.jar"/>
+               <value n="id" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.ext.jersey-bean-validation.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.ext.jersey-bean-validation.jar"/>
+               <value n="id" v="Org.glassfish.jersey.ext.jersey-bean-validation.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.ext.jersey-entity-filtering.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.ext.jersey-entity-filtering.jar"/>
+               <value n="id" v="Org.glassfish.jersey.ext.jersey-entity-filtering.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.media.jersey-media-jaxb.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.media.jersey-media-jaxb.jar"/>
+               <value n="id" v="Org.glassfish.jersey.media.jersey-media-jaxb.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.media.jersey-media-json-jackson.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.media.jersey-media-json-jackson.jar"/>
+               <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-jackson.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.media.jersey-media-json-jackson1.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.media.jersey-media-json-jackson1.jar"/>
+               <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-jackson1.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.media.jersey-media-json-jettison.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.media.jersey-media-json-jettison.jar"/>
+               <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-jettison.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.media.jersey-media-json-processing.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.media.jersey-media-json-processing.jar"/>
+               <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-processing.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.media.jersey-media-moxy.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.media.jersey-media-moxy.jar"/>
+               <value n="id" v="Org.glassfish.jersey.media.jersey-media-moxy.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.media.jersey-media-multipart.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.media.jersey-media-multipart.jar"/>
+               <value n="id" v="Org.glassfish.jersey.media.jersey-media-multipart.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.jersey.media.jersey-media-sse.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.jersey.media.jersey-media-sse.jar"/>
+               <value n="id" v="Org.glassfish.jersey.media.jersey-media-sse.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/wlserver/modules/javax.enterprise.cdi-api.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Javax.enterprise.cdi-api.jar"/>
+               <value n="id" v="Javax.enterprise.cdi-api.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/wlserver/modules/org.glassfish.hk2.osgi-resource-locator.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.hk2.osgi-resource-locator.jar"/>
+               <value n="id" v="Org.glassfish.hk2.osgi-resource-locator.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.hk2.hk2-api.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.hk2.hk2-api.jar"/>
+               <value n="id" v="Org.glassfish.hk2.hk2-api.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../Oracle/Middleware/JDeveloper12.2.1/oracle_common/modules/org.glassfish.hk2.hk2-utils.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Org.glassfish.hk2.hk2-utils.jar"/>
+               <value n="id" v="Org.glassfish.hk2.hk2-utils.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+         </list>
+      </hash>
+      <list n="libraryReferences">
+         <hash>
+            <value n="id" v="JSP Runtime"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.mail-1.5.5.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Mariadb-java-client-1.1.8.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Serialized-php-parser-0.3.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Gson-2.6.2.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.servlet.javax.servlet-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.servlet.jsp.javax.servlet.jsp-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.javax.el.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.annotation.javax.annotation-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.inject.javax.inject.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.ws.rs.javax.ws.rs-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.bundles.repackaged.jersey-guava.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.containers.jersey-container-servlet-core.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.containers.jersey-container-servlet.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.core.jersey-client.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.core.jersey-common.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.core.jersey-server.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-servlet.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x-transaction.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.cdi.jersey-cdi1x.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.jersey-bean-validation.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.ext.jersey-entity-filtering.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-jaxb.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-jackson.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-jackson1.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-jettison.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-json-processing.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-moxy.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-multipart.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.jersey.media.jersey-media-sse.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Javax.enterprise.cdi-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.hk2.osgi-resource-locator.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.hk2.hk2-api.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Org.glassfish.hk2.hk2-utils.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+      </list>
+   </hash>
+   <hash n="oracle.jdevimpl.config.JProjectPaths">
+      <url n="outputDirectory" path="classes/"/>
+   </hash>
+   <hash n="ResourceBundleOptions">
+      <list n="RegisteredResourceBundles"/>
+   </hash>
+</jpr:project>
