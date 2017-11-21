@@ -57,7 +57,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                     while (posts.next()) {
                         int idPost = posts.getInt(1);
                         
-                        this.categorizarEdadv2(idPost);
+                        
                     }
                 }
             }
@@ -190,7 +190,7 @@ public class CategorizadorHandbox extends HandboxConnections {
 
             }
 
-            //Me traigo los tags para ver si alg�n tag es categor�a.
+            //Me traigo los tags para ver si algún tag es categoría.
             query =
                 "select r.term_taxonomy_id id , w.name nombre from " + PREFIJOV2 + "term_relationships r, " +
                 PREFIJOV2 + "term_taxonomy t, " + PREFIJOV2 + "terms w " + "where r.object_id =" + idPost + " " +
@@ -233,40 +233,6 @@ public class CategorizadorHandbox extends HandboxConnections {
             ResultSet categoriasFinales = selectV2(query);
 
 
-            int tienedificultad = 0;
-
-            while (categoriasFinales.next()) {
-                if (categoriasFinales.getInt(1) == 41 || categoriasFinales.getInt(1) == 77 ||
-                    categoriasFinales.getInt(1) == 87 || categoriasFinales.getInt(1) == 94) {
-
-                    tienedificultad++;
-                }
-            }
-
-            if (tienedificultad == 0) {
-                String idDificultad = "87";
-                if (dificultadFacil > 0)
-                    idDificultad = "77";
-                String insert =
-                    "INSERT INTO " + PREFIJOV2 +
-                    "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES (" + idPost + ", " +
-                    idDificultad + ", 0 )";
-                insertV2(insert);
-            }
-            if (paraPeques > 0)
-            {
-                     String  idPeques = "100";
-                    try {
-                    String insert =
-                        "INSERT INTO " + PREFIJOV1 +
-                        "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES (" + idPost + ", " +
-                        idPeques + ", 0 )";
-                        insertV1(insert);
-                     } catch (Exception e) {
-                    // TODO: Add catch code
-                     }
-            }
-
             //Borro categor�as principales
 
             String delete =
@@ -299,97 +265,78 @@ public class CategorizadorHandbox extends HandboxConnections {
     }
     
     
-    public void categorizarEdadv2(int idPost) {
+    public void categorizarVideo(int idPost) {
         
         try {
-            int yatienePeques = 0;
-            int paraPeques = 0;
-            //Como a d�a de hoy no me traigo los tags, me recorro el t�tulo (de momento) para a�adir tags
+            int esVideo = 0;
+            int yatieneVideo = 0;
+            //Me traigo contenido del video, y busco las palabras iframe y youtube, si las contienen hay probabilidad de que haya video.
             String query = "SELECT  post_title,post_content FROM " + PREFIJOV2 + "posts where ID='" + idPost + "'";
-            //Me traigo t�tulo y contenido del post para extraer posibles tags y categor�as
+
             ResultSet post = selectV2(query);
             if (post.next()) {
-                Resultado.getResultado().getMensajelog().addLinea("categorizaredad " + post.getString(1));
+                Resultado.getResultado().getMensajelog().addLinea("Comprobar Video " + post.getString(1));
                 //Del texto, sacamos las palabras, las contamos, si estan n veces repetidas miramos si son categoria.
                 //Si tienen mas de 3 letras pero no se repite lo comparo con las etiquetas unicamente.
                 String[] palabras =
                     post.getString(2).replaceAll("\\<.*?>",
                                                  "").split("[[ ]*|[,]*|[\"]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
-                HashMap words = new HashMap();
+                
                 for (int i = 0; i < palabras.length; i++) {
 
                     if ((palabras[i].length() > 3) && (!palabras[i].contains(")")) && (!palabras[i].contains("(")) &&
-                        (!palabras[i].contains("<")) && (!palabras[i].contains(">")) &&
-                        (!palabras[i].contains("handbox")))
+                         (!palabras[i].contains(">")) && (!palabras[i].contains("handbox")))
 
                     {
-                        if (palabras[i].matches("ni�[o|a][s]") || palabras[i].matches("peque[s]") ||
-                            palabras[i].matches("nen[e|a][s]")) {
-                            paraPeques++;
+                        if (palabras[i].matches("iframe") || palabras[i].matches("<iframe") ||
+                            palabras[i].matches("youtube")) {
+                            esVideo++;
                         }
                     }
                 }
                 
                                 
             }
-
-            //Compruebo que el post no tiene ya la categoria de ni�os.
+            
+            //Compruebo que el post no tiene ya la categoria de video.
             query = "select r.term_taxonomy_id id , w.name nombre from " + PREFIJOV2 + "term_relationships r, " +
                 PREFIJOV2 + "term_taxonomy t, " + PREFIJOV2 + "terms w " + "where r.object_id =" + idPost + " " +
                 "and r.term_taxonomy_id = t.term_taxonomy_id " + "and w.term_id = t.term_id " +
-                "and t.taxonomy='category'";;
+                "and t.taxonomy='category'";
             ResultSet categorias = selectV2(query);
             //Si existe categor�a con ese tag, le asigno categor�a.
             while (categorias.next()) {
-                if (categorias.getInt(1)==100)
-                    yatienePeques++;
+                if (categorias.getString(2).equalsIgnoreCase("Video"))
+                    yatieneVideo++;
             }
 
             //Reviso por �ltima vez las categorias, si no tiene las categorias 100 ni 44, le pongo por defecto la 44
             //41  77  87  94,   le pongo por defecto la 87
-            if (paraPeques > 0)
+            if ((esVideo > 0)&&!(yatieneVideo > 0 ))
             {
-                     String  idPeques = "100";
-                    try {
+                    try {          
+                         String  idVideo = "";
+                     //Obtengo el id de la categoria video;
+                    query = "select t.term_taxonomy_id id " + 
+                    "from " + PREFIJOV2 + "term_taxonomy t, " + PREFIJOV2 + "terms w " + 
+                    "where w.term_id = t.term_id and t.taxonomy='category' and w.name='Video'";
+                         ResultSet categoriaVideo = selectV2(query);                         
+                         if (categoriaVideo.next()) {
+                              idVideo = categorias.getString(1);
+                         }   
+                        
                     String insert =
                         "INSERT INTO " + PREFIJOV2 +
                         "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES (" + idPost + ", " +
-                        idPeques + ", 0 )";
+                        idVideo + ", 0 )";
                         insertV2(insert);
-                        Resultado.getResultado().getMensajelog().addLinea("Post " + idPost+ "  de ni�os");
-                        //Si tiene la categor�a adultos la borro
-                        String delete =
-                            "delete from " + PREFIJOV2 + "term_relationships where object_id = " + idPost +
-                            " and term_taxonomy_id = 44";
-                        insertV2(delete);
+                        Resultado.getResultado().getMensajelog().addLinea("Post " + idPost+ "  de Video");
+                        
                         
                      } catch (Exception e) {
                     // TODO: Add catch code
                      }
             }
-
-            //Borro categor�as principales
-
-            String delete =
-                "delete from " + PREFIJOV2 + "term_relationships where object_id = " + idPost +
-                " and term_taxonomy_id = 40";
-            insertV2(delete);
-            delete =
-                "delete from " + PREFIJOV2 + "term_relationships where object_id = " + idPost +
-                " and term_taxonomy_id = 56";
-            insertV2(delete);
-            delete =
-                "delete from " + PREFIJOV2 + "term_relationships where object_id = " + idPost +
-                " and term_taxonomy_id = 70";
-            insertV2(delete);
-            delete =
-                "delete from " + PREFIJOV2 + "term_relationships where object_id = " + idPost +
-                " and term_taxonomy_id = 72";
-            insertV2(delete);
-            delete =
-                "delete from " + PREFIJOV2 + "term_relationships where object_id = " + idPost +
-                " and term_taxonomy_id = 96";
-            insertV2(delete);
         } catch (SQLException sqle) {
             // TODO: Add catch code
             
