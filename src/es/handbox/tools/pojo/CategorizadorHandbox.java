@@ -16,6 +16,11 @@ public class CategorizadorHandbox extends HandboxConnections {
 
     }
     
+    public CategorizadorHandbox(String sentido) {
+        super(sentido);
+
+    }
+    
     public CategorizadorHandbox(int limit, int version) {
         super("feeds2hbx");
 
@@ -109,7 +114,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                         query =
                             "select x.term_taxonomy_id from " + PREFIJOV2 + "terms t, " + PREFIJOV2 +
                             "term_taxonomy x " + "where x.taxonomy='category' and x.term_id = t.term_id " +
-                            "and (t.name like '%" + key + "%' or t.slug like '%" + key + "%')";
+                            "and (t.name like '" + key + "%' or t.slug = '" + key + "')";
 
                         ResultSet tags = selectV2(query);
                         while (tags.next()) {
@@ -122,7 +127,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                             Resultado.getResultado().getMensajelog().addLinea(key + ": " + words.get(key));
                             Resultado.getResultado().getMensajelog().addLinea(" cate");
                         }
-                    } /* else { //Esto hay que verlo, como añado nuevos tags del texto.
+                    } /* else { //Esto hay que verlo, como aï¿½ado nuevos tags del texto.
                         if ((Integer.parseInt((String) words.get(key)) > 1) &&
                             (((String) words.get(key)).length() > 2)) {
                             query =
@@ -159,7 +164,8 @@ public class CategorizadorHandbox extends HandboxConnections {
                             "select x.term_taxonomy_id from " + PREFIJOV2 + "terms t, " + PREFIJOV2 +
                             "term_taxonomy x " +
                             "where (x.taxonomy='category' or x.taxonomy='post_tag') and x.term_id = t.term_id " +
-                            "and (t.name like '%" + palabras[i] + "%' or t.slug like '%" + palabras[i] + "%')";
+                            "and (t.name = '" + palabras[i] + 
+                                    "' or t.slug = '" + palabras[i] + "')";//ISRA
 
                         try {
                             ResultSet tags = selectV2(query);
@@ -194,8 +200,8 @@ public class CategorizadorHandbox extends HandboxConnections {
 
                 query =
                     "select t.term_id from " + PREFIJOV2 + "terms t, " + PREFIJOV2 + "term_taxonomy x " +
-                    "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name like '%" +
-                    terminos.getString(2) + "%' or t.slug like '%" + terminos.getString(2) + "%')";
+                    "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name = '" +
+                    terminos.getString(2) + "' or t.slug = '" + terminos.getString(2) + "')";
 
                 try {
                     ResultSet tags = selectV2(query);
@@ -282,8 +288,8 @@ public class CategorizadorHandbox extends HandboxConnections {
                          (!palabras[i].contains(">")) && (!palabras[i].contains("handbox")))
 
                     {
-                        if (palabras[i].matches("iframe") || palabras[i].matches("<iframe") ||
-                            palabras[i].matches("youtube")) {
+                        if (palabras[i].matches(".*iframe.*")  ||
+                            palabras[i].matches(".*youtube.*")) {
                             esVideo++;
                         }
                     }
@@ -527,8 +533,8 @@ public class CategorizadorHandbox extends HandboxConnections {
 
                     query =
                         "select t.term_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 + "term_taxonomy x " +
-                        "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name like '%" +
-                        terminos.getString(2) + "%' or t.slug like '%" + terminos.getString(2) + "%')";
+                        "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name like '" +
+                        terminos.getString(2) + "%' or t.slug = '" + terminos.getString(2) + "')";
 
                     try {
                         ResultSet tags = selectV1(query);

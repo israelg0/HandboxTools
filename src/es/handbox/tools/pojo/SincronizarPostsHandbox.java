@@ -14,9 +14,15 @@ import java.util.Calendar;
 
 public class SincronizarPostsHandbox extends HandboxConnections {
     String maxPosts;
+    String sentido;
 
     public SincronizarPostsHandbox() {
         super("feeds2hbx");
+    }
+    
+    public SincronizarPostsHandbox(String sentido_) {
+        super(sentido_);
+        sentido = sentido_;
     }
 
     public MensajeLog sincronizarPosts(String limite) {
@@ -78,7 +84,7 @@ public class SincronizarPostsHandbox extends HandboxConnections {
                         }
 
                         //Aqui controlare si quiero o no que se copie el post. Segun titulo.
-                        CategorizadorHandbox categorizadorHandbox = new CategorizadorHandbox();
+                        CategorizadorHandbox categorizadorHandbox = new CategorizadorHandbox(sentido);
 
                         //Si no esta repe el post y no nos lo saltamos.
                         if (!saltar)
@@ -121,7 +127,7 @@ public class SincronizarPostsHandbox extends HandboxConnections {
                             if (rsLastPostv2.next()) {
                                 int IDv2 = rsLastPostv2.getInt(1);
                                 //Categorizo el post de la V1 (original)
-                                categorizadorHandbox = new CategorizadorHandbox();
+                                categorizadorHandbox = new CategorizadorHandbox(sentido);
                                 categorizadorHandbox.categorizarPostv2(IDv2);
                                 res.getMensajelog().addLinea("Nuevo ID para el post " + IDv2 + " -----------------");
                                 //2.- Obtengo todos sus elementos cuyo post-parent=postID
@@ -249,7 +255,7 @@ public class SincronizarPostsHandbox extends HandboxConnections {
                                 //6.- Establezco el Thumbnail
                                 res.getMensajelog().addLinea("Actualizando Imagen de Portada");
                                 String queryThumbnail =
-                                    "select post_name from feed_posts where ID in (select meta_value from feed_postmeta where post_id=" +
+                                    "select post_name from " + PREFIJOV1 + "posts where ID in (select meta_value from "+ PREFIJOV1 + "postmeta where post_id=" +
                                     IDv1 + " and meta_key='_thumbnail_id')";
 
                                 ResultSet rsThumbnailv1 = selectV1(queryThumbnail);
@@ -303,6 +309,7 @@ public class SincronizarPostsHandbox extends HandboxConnections {
                             ResultSet v2Post = selectV2(queryV2Post);
                             if (v2Post.next()) {
                                 res.getMensajelog().addLinea("Actualizando Terms para el post");
+                                //OJO QUE YA SE CATEGORIZA, COMPROBAR QUE NO ESTA REPE. ISRA.
                                 while (v1terms.next()) {
                                     String insertV2Terms =
                                         "insert into " + PREFIJOV2 +
