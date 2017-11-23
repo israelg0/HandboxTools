@@ -21,7 +21,7 @@ public class Hbxtools {
         
         if (opcion.equalsIgnoreCase("SincronizarPosts")) {
             SincronizarPostsHandbox posts = new SincronizarPostsHandbox("v2tobeta");
-            posts.sincronizarPosts("1");
+            posts.sincronizarPosts("10");
         }
         
         

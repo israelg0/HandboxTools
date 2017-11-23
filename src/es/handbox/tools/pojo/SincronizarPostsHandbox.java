@@ -93,7 +93,8 @@ public class SincronizarPostsHandbox extends HandboxConnections {
                         if (!saltar) {
                             //Categorizo el post de la V1 (feeds original)
                             
-                            categorizadorHandbox.categorizarPostv1(IDv1);
+                            //categorizadorHandbox.categorizarPostv1(IDv1);
+                            categorizadorHandbox.categorizarVideo(IDv1);
                             res.getMensajelog().addLinea("Actualizando " + IDv1 + " -----------------");
                             //1.- Inserto el nuevo post y obtengo el nuevo ID del post
                             String insertNuevoPost =

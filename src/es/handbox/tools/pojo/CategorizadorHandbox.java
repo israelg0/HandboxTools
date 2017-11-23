@@ -77,12 +77,8 @@ public class CategorizadorHandbox extends HandboxConnections {
     public void categorizarPostv2(int idPost) {
         
         try {
-            
-            int dificultadFacil = 0;
-            int paraPeques = 0;
-            //Como a d�a de hoy no me traigo los tags, me recorro el t�tulo (de momento) para a�adir tags
+            //Traigo titulo y contenido del post a categorizar
             String query = "SELECT  post_title,post_content FROM " + PREFIJOV2 + "posts where ID='" + idPost + "'";
-            //Me traigo t�tulo y contenido del post para extraer posibles tags y categor�as
             ResultSet post = selectV2(query);
             if (post.next()) {
                 Resultado.getResultado().getMensajelog().addLinea("Categorizando "+post.getString(1));
@@ -94,10 +90,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                 HashMap words = new HashMap();
                 for (int i = 0; i < palabras.length; i++) {
 
-                    if ((palabras[i].length() > 3) && (!palabras[i].contains(")")) && (!palabras[i].contains("(")) &&
-                        (!palabras[i].contains("<")) && (!palabras[i].contains(">")) &&
-                        (!palabras[i].contains("handbox")))
-
+                    if (esPalabraCategorizable(palabras[i])&&!(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias)))
                     {
                         int repeticiones = 1;
                         if (words.get(palabras[i]) != null) {
@@ -107,10 +100,12 @@ public class CategorizadorHandbox extends HandboxConnections {
                         words.put(palabras[i], repeticiones + "");                       
                     }
                 }
+                //En este punto tengo las palabras del tutorial con el numero de repeticiones.
                 ArrayList<String> keys = new ArrayList<String>(words.keySet());
                 for (String key : keys) {
-
-                    if ((Integer.parseInt((String) words.get(key)) > 1) && (key.length() > 3)) {
+                    //Si es mayor que 1 y la palabra es mayor de 3 (¿no me lo puedo ahorrar esto ultimo?)
+                    if ((Integer.parseInt((String) words.get(key)) > 1) && (key.length() > 3) && !(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias))) {
+                        //compruebo si hay alguna categoria que coincida con la palabra.
                         query =
                             "select x.term_taxonomy_id from " + PREFIJOV2 + "terms t, " + PREFIJOV2 +
                             "term_taxonomy x " + "where x.taxonomy='category' and x.term_id = t.term_id " +
@@ -118,14 +113,13 @@ public class CategorizadorHandbox extends HandboxConnections {
 
                         ResultSet tags = selectV2(query);
                         while (tags.next()) {
-                            //Lo a�ado como tag o categoria
+                            //tag o categoria
                             String insert =
                                 "INSERT INTO " + PREFIJOV2 +
                                 "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " + idPost +
                                 ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                             insertV2(insert);
-                            Resultado.getResultado().getMensajelog().addLinea(key + ": " + words.get(key));
-                            Resultado.getResultado().getMensajelog().addLinea(" cate");
+                            Resultado.getResultado().getMensajelog().addLinea(key + ": " + words.get(key) + " cate");
                         }
                     } /* else { //Esto hay que verlo, como a�ado nuevos tags del texto.
                         if ((Integer.parseInt((String) words.get(key)) > 1) &&
@@ -159,24 +153,24 @@ public class CategorizadorHandbox extends HandboxConnections {
                 palabras = post.getString(1).split("[[ ]*|[,]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
                 for (int i = 0; i < palabras.length; i++) {
 
-                    if (palabras[i].length() > 3) {
+                    if ((palabras[i].length() > 3) &&!(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias))) {
                         query =
                             "select x.term_taxonomy_id from " + PREFIJOV2 + "terms t, " + PREFIJOV2 +
                             "term_taxonomy x " +
                             "where (x.taxonomy='category' or x.taxonomy='post_tag') and x.term_id = t.term_id " +
-                            "and (t.name = '" + palabras[i] + 
-                                    "' or t.slug = '" + palabras[i] + "')";//ISRA
+                            "and (t.name = '" + palabras[i] + "' or t.slug = '" + palabras[i] + "')";//ISRA
 
                         try {
                             ResultSet tags = selectV2(query);
                             while (tags.next()) {
-                                //Lo a�ado como tag o categoria
+                                //Lo meto como tag o categoria
                                 String insert =
                                     "INSERT INTO " + PREFIJOV2 +
                                     "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
                                     idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                                 insertV2(insert);
                             }
+                            //OJO, AQUI METERIA LAS PALABRAS DE MAS DE 4 LETRAS QUE NO LO ESTEN YA COMO TAGS.
                         } catch (Exception sqle) {
                             // TODO: Add catch code
 
@@ -200,8 +194,8 @@ public class CategorizadorHandbox extends HandboxConnections {
 
                 query =
                     "select t.term_id from " + PREFIJOV2 + "terms t, " + PREFIJOV2 + "term_taxonomy x " +
-                    "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name = '" +
-                    terminos.getString(2) + "' or t.slug = '" + terminos.getString(2) + "')";
+                    "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name like '" +
+                    terminos.getString(2) + "%' or t.slug = '" + terminos.getString(2) + "')";
 
                 try {
                     ResultSet tags = selectV2(query);
@@ -219,9 +213,6 @@ public class CategorizadorHandbox extends HandboxConnections {
 
             }
 
-            //Reviso por �ltima vez las categorias, si no tiene las categorias 100 ni 44, le pongo por defecto la 44
-            //41  77  87  94,   le pongo por defecto la 87
-
             categorizarVideo(idPost);
 
             query =
@@ -231,7 +222,6 @@ public class CategorizadorHandbox extends HandboxConnections {
                 "and t.taxonomy='category'";
 
             ResultSet categoriasFinales = selectV2(query);
-
 
             //Borro categor�as principales
 
@@ -393,78 +383,107 @@ public class CategorizadorHandbox extends HandboxConnections {
                 (!palabra.contains("<")) && 
                 (!palabra.contains(">")) &&
                 (!palabra.contains("handbox")) &&
-                (!palabra.startsWith("-"));
+                (!palabra.startsWith("-")
+                
+                );
                         }
     
     /*************************/
     
     
     /**
-     * 
-     * @param idPost
-     */
-    public void categorizarPostv1(int idPost) {
-            
-            try {
+         * 
+         * @param idPost
+         */
+        public void categorizarPostv1(int idPost) {
                 
-                //Como a d�a de hoy no me traigo los tags, me recorro el t�tulo (de momento) para a�adir tags
-                String query = "SELECT  post_title,post_content FROM " + PREFIJOV1 + "posts where ID='" + idPost + "'";
-                //Me traigo t�tulo y contenido del post para extraer posibles tags y categor�as
-                //NOTA: Añadir las palabras del titulo (ya veremos como eliminamos las no influyentes) como tags
-                ResultSet post = selectV1(query);
-                if (post.next()) {
-                    Resultado.getResultado().getMensajelog().addLinea(post.getString(1));
-                    //Del texto, sacamos las palabras, las contamos, si estan 2 veces repetidas miramos si son categoria.
-                    //Si tienen mas de 3 letras pero no se repite lo comparo con las etiquetas unicamente.
-                    String[] palabras =
-                        post.getString(2).replaceAll("\\<.*?>",
-                                                     "").split("[[ ]*|[,]*|[\"]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
-                    HashMap words = new HashMap();
-                    for (int i = 0; i < palabras.length; i++) {
-
-                        if (esPalabraCategorizable(palabras[i]))
-                        {
-                            int repeticiones = 1;
-                            if (words.get(palabras[i]) != null) {
-                                repeticiones = Integer.parseInt((String) words.get(palabras[i]));
-                                repeticiones++;
-                            }
-                            words.put(palabras[i], repeticiones + "");
-                            
-                        }
-                    }
-                    //En este punto tengo las palabras del tutorial con el numero de repeticiones.
+                try {
                     
-                    ArrayList<String> keys = new ArrayList<String>(words.keySet());
-                    for (String key : keys) {
-                        //Si es mayor que 1 y la palabra es mayor de 3 (¿no me lo puedo ahorrar esto ultimo?)
-                        if ((Integer.parseInt((String) words.get(key)) > 1) && (((String) words.get(key)).length() > 3)) {
-                            query =
-                                "select x.term_taxonomy_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 +
-                                "term_taxonomy x " + "where x.taxonomy='category' and x.term_id = t.term_id " +
-                                "and (t.name = '" + key + "' or t.slug='" + key + "')";
+                     //Traigo titulo y contenido del post a categorizar
+                    String query = "SELECT  post_title,post_content FROM " + PREFIJOV1 + "posts where ID='" + idPost + "'";
+                    ResultSet post = selectV1(query);
+                    if (post.next()) {
+                        Resultado.getResultado().getMensajelog().addLinea("Categorizando "+post.getString(1));
+                        //Del texto, sacamos las palabras, las contamos, si estan 2 veces repetidas miramos si son categoria.
+                        //Si tienen mas de 3 letras pero no se repite lo comparo con las etiquetas unicamente.
+                        String[] palabras =
+                            post.getString(2).replaceAll("\\<.*?>",
+                                                         "").split("[[ ]*|[,]*|[\"]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
+                        HashMap words = new HashMap();
+                        for (int i = 0; i < palabras.length; i++) {
 
-                            ResultSet tags = selectV1(query);
-                            //compruebo si hay alguna categoria que coincida con la palabra.
-                            
-                            while (tags.next()) {
-                                //Lo añado como categoria o como tag al post, lo que sea.
-                                String insert =
-                                    "INSERT INTO " + PREFIJOV1 +
-                                    "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " + idPost +
-                                    ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
-                                insertV1(insert);
-                                Resultado.getResultado().getMensajelog().addLinea(key + ": " + words.get(key) + " cate");
+                            if (esPalabraCategorizable(palabras[i])&&!(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias)))
+                            {
+                                int repeticiones = 1;
+                                if (words.get(palabras[i]) != null) {
+                                    repeticiones = Integer.parseInt((String) words.get(palabras[i]));
+                                    repeticiones++;
+                                }
+                                words.put(palabras[i], repeticiones + "");
                                 
                             }
-                        } /* else {
-                            //OJOOOOO!!!!
-                            //Esto no me gusta, mejor si la palabra muy repetida, mas de 4 letras, se repite 2 veces, doy de alta un tag
-                            if ((Integer.parseInt((String) words.get(key)) > 0) && (((String) words.get(key)).length() > 2)) {
+                        }
+                        //En este punto tengo las palabras del tutorial con el numero de repeticiones.
+                        ArrayList<String> keys = new ArrayList<String>(words.keySet());
+                        for (String key : keys) {
+                            //Si es mayor que 1 y la palabra es mayor de 3 (¿no me lo puedo ahorrar esto ultimo?)
+                            if ((Integer.parseInt((String) words.get(key)) > 1) && (((String) words.get(key)).length() > 3)) {
+                                //compruebo si hay alguna categoria que coincida con la palabra.
+                                                            query =
+                                    "select x.term_taxonomy_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 +
+                                    "term_taxonomy x " + "where x.taxonomy='category' and x.term_id = t.term_id " +
+                                    "and (t.name = '" + key + "' or t.slug='" + key + "')";
+
+                                ResultSet tags = selectV1(query);
+                                while (tags.next()) {
+                                    //tag o categoria
+                                    String insert =
+                                        "INSERT INTO " + PREFIJOV1 +
+                                        "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " + idPost +
+                                        ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
+                                    insertV1(insert);
+                                    Resultado.getResultado().getMensajelog().addLinea(key + ": " + words.get(key) + " cate");
+                                    
+                                }
+                            } /* else {
+                                //OJOOOOO!!!!
+                                //Esto no me gusta, mejor si la palabra muy repetida, mas de 4 letras, se repite 2 veces, doy de alta un tag
+                                if ((Integer.parseInt((String) words.get(key)) > 0) && (((String) words.get(key)).length() > 2)) {
+                                    query =
+                                        "select x.term_taxonomy_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 +
+                                        "term_taxonomy x " + "where x.taxonomy='post_tag' and x.term_id = t.term_id " +
+                                        "and (t.name = '" + key + "' or t.slug='" + key + "')";
+
+                                    try {
+                                        ResultSet tags = selectV1(query);
+                                        while (tags.next()) {
+                                            //Lo a�ado como tag o categoria
+                                            String insert =
+                                                "INSERT INTO " + PREFIJOV1 +
+                                                "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
+                                                idPost + ", " + tags.getInt(1) +
+                                                ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
+                                            insertV1(insert);
+                                            System.out.print(key + ": " + words.get(key));
+                                            Resultado.getResultado().getMensajelog().addLinea(" tag");
+                                        }
+                                    } catch (SQLException sqle) {
+                                        // TODO: Add catch code
+                                        
+                                    }
+                                }
+                            }*/
+                        }
+                        //Del titulo saco categorias o etiquetas
+                        palabras = post.getString(1).split("[[ ]*|[,]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
+                        for (int i = 0; i < palabras.length; i++) {
+
+                            if ((palabras[i].length() > 3)&&!(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias))) {
                                 query =
                                     "select x.term_taxonomy_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 +
-                                    "term_taxonomy x " + "where x.taxonomy='post_tag' and x.term_id = t.term_id " +
-                                    "and (t.name = '" + key + "' or t.slug='" + key + "')";
+                                    "term_taxonomy x " +
+                                    "where (x.taxonomy='category' or x.taxonomy='post_tag') and x.term_id = t.term_id " +
+                                    "and (t.name = '" + palabras[i] + "' or t.slug='" + palabras[i] + "')";
 
                                 try {
                                     ResultSet tags = selectV1(query);
@@ -473,169 +492,94 @@ public class CategorizadorHandbox extends HandboxConnections {
                                         String insert =
                                             "INSERT INTO " + PREFIJOV1 +
                                             "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
-                                            idPost + ", " + tags.getInt(1) +
-                                            ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
+                                            idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                                         insertV1(insert);
-                                        System.out.print(key + ": " + words.get(key));
-                                        Resultado.getResultado().getMensajelog().addLinea(" tag");
                                     }
-                                } catch (SQLException sqle) {
-                                    // TODO: Add catch code
+                                    //OJO, AQUI METERIA LAS PALABRAS DE MAS DE 4 LETRAS QUE NO LO ESTEN YA COMO TAGS.
                                     
+                                    
+                                } catch (Exception sqle) {
+                                    // TODO: Add catch code
+
                                 }
                             }
-                        }*/
+
+                        }
+
+
                     }
-                    //Del titulo saco categorias o etiquetas
-                    palabras = post.getString(1).split("[[ ]*|[,]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
-                    for (int i = 0; i < palabras.length; i++) {
 
-                        if (palabras[i].length() > 3) {
-                            query =
-                                "select x.term_taxonomy_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 +
-                                "term_taxonomy x " +
-                                "where (x.taxonomy='category' or x.taxonomy='post_tag') and x.term_id = t.term_id " +
-                                "and (t.name = '" + palabras[i] + "' or t.slug='" + palabras[i] + "')";
+                    //Me traigo los tags para ver si alg�n tag es categor�a. 
+                    query =
+                        "select r.term_taxonomy_id id , w.name nombre from " + PREFIJOV1 + "term_relationships r, " +
+                        PREFIJOV1 + "term_taxonomy t, " + PREFIJOV1 + "terms w " + "where r.object_id =" + idPost + " " +
+                        "and r.term_taxonomy_id = t.term_taxonomy_id " + "and w.term_id = t.term_id " +
+                        "and t.taxonomy='post_tag'";
+                    ResultSet terminos = selectV1(query);
+                    //Si existe categor�a con ese tag, le asigno categor�a.
+                    while (terminos.next()) {
 
-                            try {
-                                ResultSet tags = selectV1(query);
-                                while (tags.next()) {
-                                    //Lo a�ado como tag o categoria
-                                    String insert =
-                                        "INSERT INTO " + PREFIJOV1 +
-                                        "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
-                                        idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
-                                    insertV1(insert);
-                                }
-                                //OJO, AQUI METERIA LAS PALABRAS DE MAS DE 4 LETRAS QUE NO LO ESTEN YA COMO TAGS.
-                                
-                                
-                            } catch (Exception sqle) {
-                                // TODO: Add catch code
+                        query =
+                            "select t.term_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 + "term_taxonomy x " +
+                            "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name like '" +
+                            terminos.getString(2) + "%' or t.slug = '" + terminos.getString(2) + "')";
 
+                        try {
+                            ResultSet tags = selectV1(query);
+                            while (tags.next()) {
+                                String insert =
+                                    "INSERT INTO " + PREFIJOV1 +
+                                    "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
+                                    idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
+                                insertV1(insert);
                             }
+                        } catch (SQLException sqle) {
+                            // TODO: Add catch code
+                           
                         }
 
                     }
 
-
-                }
-
-                //Me traigo los tags para ver si alg�n tag es categor�a. OJO!!! LA CONSULTA DEBE SER MAS LAXA (he metido un like, en la consulta del while)
-                query =
-                    "select r.term_taxonomy_id id , w.name nombre from " + PREFIJOV1 + "term_relationships r, " +
-                    PREFIJOV1 + "term_taxonomy t, " + PREFIJOV1 + "terms w " + "where r.object_id =" + idPost + " " +
-                    "and r.term_taxonomy_id = t.term_taxonomy_id " + "and w.term_id = t.term_id " +
-                    "and t.taxonomy='post_tag'";
-                ResultSet terminos = selectV1(query);
-                //Si existe categor�a con ese tag, le asigno categor�a.
-                while (terminos.next()) {
+                    categorizarVideo(idPost);
 
                     query =
-                        "select t.term_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 + "term_taxonomy x " +
-                        "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name like '" +
-                        terminos.getString(2) + "%' or t.slug = '" + terminos.getString(2) + "')";
+                        "select r.term_taxonomy_id id , w.name nombre from " + PREFIJOV1 + "term_relationships r, " +
+                        PREFIJOV1 + "term_taxonomy t, " + PREFIJOV1 + "terms w " + "where r.object_id =" + idPost + " " +
+                        "and r.term_taxonomy_id = t.term_taxonomy_id " + "and w.term_id = t.term_id " +
+                        "and t.taxonomy='category'";
 
-                    try {
-                        ResultSet tags = selectV1(query);
-                        while (tags.next()) {
-                            String insert =
-                                "INSERT INTO " + PREFIJOV1 +
-                                "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
-                                idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
-                            insertV1(insert);
-                        }
-                    } catch (SQLException sqle) {
-                        // TODO: Add catch code
-                       
-                    }
+                    ResultSet categoriasFinales = selectV1(query);
 
-                }
+                    //Borro categor�as principales
 
-                //Reviso por �ltima vez las categorias, si no tiene las categorias 100 ni 44, le pongo por defecto la 44
-                //41  77  87  94,   le pongo por defecto la 87
-
-                query =
-                    "select r.term_taxonomy_id id , w.name nombre from " + PREFIJOV1 + "term_relationships r, " +
-                    PREFIJOV1 + "term_taxonomy t, " + PREFIJOV1 + "terms w " + "where r.object_id =" + idPost + " " +
-                    "and r.term_taxonomy_id = t.term_taxonomy_id " + "and w.term_id = t.term_id " +
-                    "and t.taxonomy='category'";
-
-                ResultSet categoriasFinales = selectV1(query);
-
-/* ESTO YA NO TIENE SENTIDO. ¿PUEDO APROVECHAR LA QUERY PARA ALGO?
-                int tienedificultad = 0;
-
-                while (categoriasFinales.next()) {
-                    if (categoriasFinales.getInt(1) == 41 || categoriasFinales.getInt(1) == 77 ||
-                        categoriasFinales.getInt(1) == 87 || categoriasFinales.getInt(1) == 94) {
-
-                        tienedificultad++;
-                    }
-                }
-
-                if (tienedificultad == 0) {
-                    String idDificultad = "87";
-                    if (dificultadFacil > 0)
-                        idDificultad = "77";
-                    try {
-                    String insert =
-                        "INSERT INTO " + PREFIJOV1 +
-                        "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES (" + idPost + ", " +
-                        idDificultad + ", 0 )";
-                    insertV1(insert);
-                } catch (Exception e) {
+                    String delete =
+                        "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
+                        " and term_taxonomy_id = 40";
+                    insertV1(delete);
+                    delete =
+                        "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
+                        " and term_taxonomy_id = 56";
+                    insertV1(delete);
+                    delete =
+                        "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
+                        " and term_taxonomy_id = 70";
+                    insertV1(delete);
+                    delete =
+                        "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
+                        " and term_taxonomy_id = 72";
+                    insertV1(delete);
+                    delete =
+                        "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
+                        " and term_taxonomy_id = 96";
+                    insertV1(delete);
+                } catch (SQLException sqle) {
                     // TODO: Add catch code
-                   
-                }
-                }
-
-                
                     
-                    if (paraPeques > 0)
-                    {
-                             String  idPeques = "100";
-                            try {
-                            String insert =
-                                "INSERT INTO " + PREFIJOV1 +
-                                "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES (" + idPost + ", " +
-                                idPeques + ", 0 )";
-                                insertV1(insert);
-                             } catch (Exception e) {
-                            // TODO: Add catch code
-                             }
-                    }
-*/
-                //Borro categor�as principales
-
-                String delete =
-                    "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
-                    " and term_taxonomy_id = 40";
-                insertV1(delete);
-                delete =
-                    "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
-                    " and term_taxonomy_id = 56";
-                insertV1(delete);
-                delete =
-                    "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
-                    " and term_taxonomy_id = 70";
-                insertV1(delete);
-                delete =
-                    "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
-                    " and term_taxonomy_id = 72";
-                insertV1(delete);
-                delete =
-                    "delete from " + PREFIJOV1 + "term_relationships where object_id = " + idPost +
-                    " and term_taxonomy_id = 96";
-                insertV1(delete);
-            } catch (SQLException sqle) {
-                // TODO: Add catch code
-                
-            } catch (NumberFormatException nfe) {
-                // TODO: Add catch code
-                
+                } catch (NumberFormatException nfe) {
+                    // TODO: Add catch code
+                    
+                }
             }
-        }
 
     public static void main(String[] args) {
         if (args.length>0) {

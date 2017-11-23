@@ -31,6 +31,7 @@ public class HandboxConnections {
     protected static String PREFIJOV1;// = "handbox_";
     
     protected static ArrayList<String> palabrasProhibidas;
+    protected static ArrayList<String> palabrasNoCategorias;
 
     protected String uriv1;
     protected String uriv2;
@@ -76,6 +77,8 @@ public class HandboxConnections {
                     
                     
                         palabrasProhibidas =  new ArrayList<String>(Arrays.asList(prop.getProperty("PALABRASPROHIBIDAS").split(",")));
+         
+                    palabrasNoCategorias =  new ArrayList<String>(Arrays.asList(prop.getProperty("PALABRASNOCATEGORIA").split(",")));
          
                 } catch (IOException ex) {
                         ex.printStackTrace();
