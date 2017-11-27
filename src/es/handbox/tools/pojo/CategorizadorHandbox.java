@@ -90,7 +90,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                 HashMap words = new HashMap();
                 for (int i = 0; i < palabras.length; i++) {
 
-                    if (esPalabraCategorizable(palabras[i])&&!(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias)))
+                    if (esPalabraCategorizable(palabras[i]))
                     {
                         int repeticiones = 1;
                         if (words.get(palabras[i]) != null) {
@@ -104,22 +104,24 @@ public class CategorizadorHandbox extends HandboxConnections {
                 ArrayList<String> keys = new ArrayList<String>(words.keySet());
                 for (String key : keys) {
                     //Si es mayor que 1 y la palabra es mayor de 3 (¿no me lo puedo ahorrar esto ultimo?)
-                    if ((Integer.parseInt((String) words.get(key)) > 1) && (key.length() > 3) && !(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias))) {
+                    if ((Integer.parseInt((String) words.get(key)) > 1) && (this.esPalabraCategorizable(key))) {
                         //compruebo si hay alguna categoria que coincida con la palabra.
                         query =
                             "select x.term_taxonomy_id from " + PREFIJOV2 + "terms t, " + PREFIJOV2 +
                             "term_taxonomy x " + "where x.taxonomy='category' and x.term_id = t.term_id " +
-                            "and (t.name like '" + key + "%' or t.slug = '" + key + "')";
+                            "and (t.name = '" + key + "' or t.slug = '" + key + "')";
 
                         ResultSet tags = selectV2(query);
                         while (tags.next()) {
                             //tag o categoria
+                            if (!tieneLaCategoria(idPost, tags.getInt(1))) {
                             String insert =
                                 "INSERT INTO " + PREFIJOV2 +
                                 "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " + idPost +
                                 ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                             insertV2(insert);
                             Resultado.getResultado().getMensajelog().addLinea(key + ": " + words.get(key) + " cate");
+                            }
                         }
                     } /* else { //Esto hay que verlo, como a�ado nuevos tags del texto.
                         if ((Integer.parseInt((String) words.get(key)) > 1) &&
@@ -153,7 +155,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                 palabras = post.getString(1).split("[[ ]*|[,]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
                 for (int i = 0; i < palabras.length; i++) {
 
-                    if ((palabras[i].length() > 3) &&!(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias))) {
+                    if ((palabras[i].length() > 3) && (this.esPalabraCategorizable(palabras[i]))) {
                         query =
                             "select x.term_taxonomy_id from " + PREFIJOV2 + "terms t, " + PREFIJOV2 +
                             "term_taxonomy x " +
@@ -164,11 +166,13 @@ public class CategorizadorHandbox extends HandboxConnections {
                             ResultSet tags = selectV2(query);
                             while (tags.next()) {
                                 //Lo meto como tag o categoria
+                                if (!tieneLaCategoria(idPost, tags.getInt(1))) {
                                 String insert =
                                     "INSERT INTO " + PREFIJOV2 +
                                     "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
                                     idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                                 insertV2(insert);
+                                }
                             }
                             //OJO, AQUI METERIA LAS PALABRAS DE MAS DE 4 LETRAS QUE NO LO ESTEN YA COMO TAGS.
                         } catch (Exception sqle) {
@@ -194,17 +198,19 @@ public class CategorizadorHandbox extends HandboxConnections {
 
                 query =
                     "select t.term_id from " + PREFIJOV2 + "terms t, " + PREFIJOV2 + "term_taxonomy x " +
-                    "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name like '" +
-                    terminos.getString(2) + "%' or t.slug = '" + terminos.getString(2) + "')";
+                    "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name = '" +
+                    terminos.getString(2) + "' or t.slug = '" + terminos.getString(2) + "')";
 
                 try {
                     ResultSet tags = selectV2(query);
                     while (tags.next()) {
+                        if (!tieneLaCategoria(idPost, tags.getInt(1))) {
                         String insert =
                             "INSERT INTO " + PREFIJOV2 +
                             "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
                             idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                         insertV2(insert);
+                        }
                     }
                 } catch (SQLException sqle) {
                     // TODO: Add catch code
@@ -254,7 +260,7 @@ public class CategorizadorHandbox extends HandboxConnections {
         }
     }
     
-    
+    /*
     public void categorizarVideo(int idPost) {
         
         try {
@@ -274,15 +280,12 @@ public class CategorizadorHandbox extends HandboxConnections {
                 
                 for (int i = 0; i < palabras.length; i++) {
 
-                    if ((palabras[i].length() > 3) && (!palabras[i].contains(")")) && (!palabras[i].contains("(")) &&
-                         (!palabras[i].contains(">")) && (!palabras[i].contains("handbox")))
-
-                    {
+                    
                         if (palabras[i].matches(".*iframe.*")  ||
                             palabras[i].matches(".*youtube.*")) {
                             esVideo++;
                         }
-                    }
+                    
                 }
                 
                                 
@@ -335,7 +338,104 @@ public class CategorizadorHandbox extends HandboxConnections {
             
         }
     }
-    
+    */
+    public void categorizarVideo(int idPost) {
+            
+            try {
+                int esVideo = 0;
+                int yatieneVideo = 0;
+                //Me traigo contenido del video, y busco las palabras iframe y youtube, si las contienen hay probabilidad de que haya video.
+                String query = "SELECT  post_title,post_content FROM " + PREFIJOV2 + "posts where ID='" + idPost + "'";
+
+                ResultSet post = selectV2(query);
+                if (post.next()) {
+                    //Resultado.getResultado().getMensajelog().addLinea("Comprobar Video " + post.getString(1));
+                    //Del texto, sacamos las palabras, las contamos, si estan n veces repetidas miramos si son categoria.
+                    //Si tienen mas de 3 letras pero no se repite lo comparo con las etiquetas unicamente.
+                   
+                    String[] palabras =
+                        post.getString(2).split("[[ ]*|[,]*|[\"]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
+                    
+                    for (int i = 0; i < palabras.length; i++) {
+
+                        if ((palabras[i].length() > 3))
+
+                        {
+                                
+                            if (palabras[i].matches(".*<iframe.*")) {
+                                System.out.println(i + "   " + palabras[i]);
+                                esVideo++;
+                            }
+                            if (palabras[i].matches(".*googletagmanager.*")) {
+                                System.out.println(i + "   " + palabras[i]);
+                                esVideo--;
+                            }
+                            
+                        }
+                    }
+                    
+                                    
+                }
+                
+                //Compruebo que el post no tiene ya la categoria de video.
+                query = "select r.term_taxonomy_id id , w.name nombre from " + PREFIJOV2 + "term_relationships r, " +
+                    PREFIJOV2 + "term_taxonomy t, " + PREFIJOV2 + "terms w " + "where r.object_id =" + idPost + " " +
+                    "and r.term_taxonomy_id = t.term_taxonomy_id " + "and w.term_id = t.term_id " +
+                    "and t.taxonomy='category'";
+                ResultSet categorias = selectV2(query);
+                //Si existe categorï¿½a con ese tag, le asigno categorï¿½a.
+                while (categorias.next()) {
+                    if (categorias.getString(2).equalsIgnoreCase("Video"))
+                    {
+                        yatieneVideo++;
+                        System.out.println("Ya tiene video   ");
+                    }
+                }
+
+                //Reviso por ï¿½ltima vez las categorias, si no tiene las categorias 100 ni 44, le pongo por defecto la 44
+                //41  77  87  94,   le pongo por defecto la 87
+                if ((esVideo > 0)&&!(yatieneVideo > 0 ))
+                {
+                        try {          
+                             int  idVideo = 18380;
+                         
+                             System.out.println(" POST CON VIDEO  "+ idPost);
+                        String insert =
+                            "INSERT INTO " + PREFIJOV2 +
+                            "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES (" + idPost + ", " +
+                            idVideo + ", 0 )";
+                            insertV2(insert);
+                            Resultado.getResultado().getMensajelog().addLinea("Post " + idPost+ "  de Video");
+                            
+                            Thread.sleep(1000);
+                         } catch (Exception e) {
+                        // TODO: Add catch code
+                         }
+                }
+            } catch (SQLException sqle) {
+                // TODO: Add catch code
+                
+            } catch (NumberFormatException nfe) {
+                // TODO: Add catch code
+                
+            }
+        }
+
+        public void establecercategoríadevideo() {
+            try {
+                String query = "select ID from " + PREFIJOV1 + "posts where post_type=\"post\" order by ID asc ";
+
+                ResultSet posts = selectV1(query);
+
+                while (posts.next()) {
+                    int idPost = posts.getInt(1);
+                    categorizarVideo(idPost);
+                }
+            } catch (SQLException sqle) {
+                // TODO: Add catch code
+                sqle.printStackTrace();
+            }
+        }
     /**
      *
      *
@@ -351,7 +451,7 @@ public class CategorizadorHandbox extends HandboxConnections {
             //Me traigo t�tulo y contenido del post para extraer posibles tags y categor�as
             ResultSet post = selectV1(query);
             if (post.next()) {
-                Resultado.getResultado().getMensajelog().addLinea(post.getString(1) + " �Palabras prohibidas?");
+                //Resultado.getResultado().getMensajelog().addLinea(post.getString(1) + " �Palabras prohibidas?");
                 //Del texto, sacamos las palabras, 
                 String[] palabras =
                     post.getString(1).replaceAll("\\<.*?>",
@@ -361,7 +461,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                     for (int j = 0; j < palabrasReservadas.size(); j++) {
 
                         if (palabras[i].equalsIgnoreCase(palabrasReservadas.get(j))) {
-                            Resultado.getResultado().getMensajelog().addLinea("SI");
+                            Resultado.getResultado().getMensajelog().addLinea(palabras[i] + " Está en la lista");
                             return true;
                         }
                     }
@@ -371,12 +471,28 @@ public class CategorizadorHandbox extends HandboxConnections {
             // TODO: Add catch code
             sqle.printStackTrace();
         }
-        Resultado.getResultado().getMensajelog().addLinea("NO");
+        //Resultado.getResultado().getMensajelog().addLinea("NO");
             return false;
     }
     
-    /***********************/
+    
+    /**
+     *
+     * @param palabra
+     * @return
+     */
+   
     private boolean esPalabraCategorizable(String palabra) {
+        
+            for (int j = 0; j < HandboxConnections.palabrasNoCategorias.size(); j++) {
+
+                if (palabra.equalsIgnoreCase(HandboxConnections.palabrasNoCategorias.get(j))) {
+                    Resultado.getResultado().getMensajelog().addLinea(palabra + " No categorizable");
+                    return false;
+                }
+            }
+        
+        
          return (palabra.length() > 3) && 
                 (!palabra.contains(")")) && 
                 (!palabra.contains("(")) &&
@@ -388,13 +504,13 @@ public class CategorizadorHandbox extends HandboxConnections {
                 );
                         }
     
-    /*************************/
+   
     
     
     /**
-         * 
-         * @param idPost
-         */
+     *
+     * @param idPost
+     */
         public void categorizarPostv1(int idPost) {
                 
                 try {
@@ -412,7 +528,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                         HashMap words = new HashMap();
                         for (int i = 0; i < palabras.length; i++) {
 
-                            if (esPalabraCategorizable(palabras[i])&&!(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias)))
+                            if (esPalabraCategorizable(palabras[i]))
                             {
                                 int repeticiones = 1;
                                 if (words.get(palabras[i]) != null) {
@@ -427,24 +543,30 @@ public class CategorizadorHandbox extends HandboxConnections {
                         ArrayList<String> keys = new ArrayList<String>(words.keySet());
                         for (String key : keys) {
                             //Si es mayor que 1 y la palabra es mayor de 3 (¿no me lo puedo ahorrar esto ultimo?)
-                            if ((Integer.parseInt((String) words.get(key)) > 1) && (((String) words.get(key)).length() > 3)) {
+                            if ((Integer.parseInt((String) words.get(key)) > 1) && this.esPalabraCategorizable(key)) {
                                 //compruebo si hay alguna categoria que coincida con la palabra.
                                                             query =
                                     "select x.term_taxonomy_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 +
                                     "term_taxonomy x " + "where x.taxonomy='category' and x.term_id = t.term_id " +
                                     "and (t.name = '" + key + "' or t.slug='" + key + "')";
-
+                                
                                 ResultSet tags = selectV1(query);
-                                while (tags.next()) {
-                                    //tag o categoria
-                                    String insert =
-                                        "INSERT INTO " + PREFIJOV1 +
-                                        "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " + idPost +
-                                        ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
-                                    insertV1(insert);
-                                    Resultado.getResultado().getMensajelog().addLinea(key + ": " + words.get(key) + " cate");
+                                if (!tieneLaCategoria(idPost, tags.getInt(1))) {
                                     
+                                    while (tags.next()) {
+                                        //tag o categoria
+                                        if (!tieneLaCategoria(idPost, tags.getInt(1))) {
+                                        String insert =
+                                            "INSERT INTO " + PREFIJOV1 +
+                                            "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " + idPost +
+                                            ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
+                                        insertV1(insert);
+                                        Resultado.getResultado().getMensajelog().addLinea(key + ": " + words.get(key) + " cate");
+                                        }
+                                    }
                                 }
+                                
+                                
                             } /* else {
                                 //OJOOOOO!!!!
                                 //Esto no me gusta, mejor si la palabra muy repetida, mas de 4 letras, se repite 2 veces, doy de alta un tag
@@ -478,7 +600,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                         palabras = post.getString(1).split("[[ ]*|[,]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
                         for (int i = 0; i < palabras.length; i++) {
 
-                            if ((palabras[i].length() > 3)&&!(contienePalabra(idPost, HandboxConnections.palabrasNoCategorias))) {
+                            if (this.esPalabraCategorizable(palabras[i])) {
                                 query =
                                     "select x.term_taxonomy_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 +
                                     "term_taxonomy x " +
@@ -489,11 +611,13 @@ public class CategorizadorHandbox extends HandboxConnections {
                                     ResultSet tags = selectV1(query);
                                     while (tags.next()) {
                                         //Lo a�ado como tag o categoria
+                                        if (!tieneLaCategoria(idPost, tags.getInt(1))) {
                                         String insert =
                                             "INSERT INTO " + PREFIJOV1 +
                                             "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
                                             idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                                         insertV1(insert);
+                                        }
                                     }
                                     //OJO, AQUI METERIA LAS PALABRAS DE MAS DE 4 LETRAS QUE NO LO ESTEN YA COMO TAGS.
                                     
@@ -521,17 +645,19 @@ public class CategorizadorHandbox extends HandboxConnections {
 
                         query =
                             "select t.term_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 + "term_taxonomy x " +
-                            "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name like '" +
-                            terminos.getString(2) + "%' or t.slug = '" + terminos.getString(2) + "')";
+                            "where x.taxonomy='category' and x.term_id = t.term_id " + "and (t.name = '" +
+                            terminos.getString(2) + "' or t.slug = '" + terminos.getString(2) + "')";
 
                         try {
                             ResultSet tags = selectV1(query);
                             while (tags.next()) {
+                                if (!tieneLaCategoria(idPost, tags.getInt(1))) {
                                 String insert =
                                     "INSERT INTO " + PREFIJOV1 +
                                     "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
                                     idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                                 insertV1(insert);
+                                }
                             }
                         } catch (SQLException sqle) {
                             // TODO: Add catch code
@@ -580,6 +706,43 @@ public class CategorizadorHandbox extends HandboxConnections {
                     
                 }
             }
+    
+    
+    
+    public void categorizarTodos(int inicial, int limite) {
+        String queryAllPosts =
+            "select ID from " +
+            PREFIJOV1 + 
+            "posts where post_type=\"post\" and ID>" + inicial + " and post_status='publish' order by ID asc limit " + limite;
+        
+        try {
+            ResultSet rsNuevosPostsv1 = selectV1(queryAllPosts);
+            while (rsNuevosPostsv1.next()) {
+
+                int IDv1 = rsNuevosPostsv1.getInt(1);
+                categorizarPostv1(IDv1);
+            }
+        } catch (SQLException sqle) {
+            // TODO: Add catch code
+            sqle.printStackTrace();
+        }
+    }
+    
+    
+    private boolean tieneLaCategoria(int idPost, int term_taxonomy_id) {
+        try {
+            String select =
+                "SELECT * FROM " + PREFIJOV1 + "term_relationships where  object_id = " + idPost +
+                " and term_taxonomy_id = " + term_taxonomy_id;
+            ResultSet categoria = selectV1(select);
+            if (categoria.next())
+                return true;
+        } catch (SQLException sqle) {
+            // TODO: Add catch code
+            sqle.printStackTrace();
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
         if (args.length>0) {

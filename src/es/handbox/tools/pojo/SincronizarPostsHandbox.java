@@ -88,14 +88,17 @@ public class SincronizarPostsHandbox extends HandboxConnections {
 
                         //Si no esta repe el post y no nos lo saltamos.
                         if (!saltar)
+                        {
                             saltar = categorizadorHandbox.contienePalabra(IDv1, HandboxConnections.palabrasProhibidas);
-
+                            if (saltar)
+                                res.getMensajelog().addLinea("No se evaluará por palabra prohibida. ");
+                        }
                         if (!saltar) {
                             //Categorizo el post de la V1 (feeds original)
                             
-                            //categorizadorHandbox.categorizarPostv1(IDv1);
-                            categorizadorHandbox.categorizarVideo(IDv1);
-                            res.getMensajelog().addLinea("Actualizando " + IDv1 + " -----------------");
+                            categorizadorHandbox.categorizarPostv1(IDv1);
+                            //categorizadorHandbox.categorizarVideo(IDv1);
+                            res.getMensajelog().addLinea("Actualizando " + IDv1);
                             //1.- Inserto el nuevo post y obtengo el nuevo ID del post
                             String insertNuevoPost =
                                 "INSERT INTO `" + PREFIJOV2 +
@@ -327,6 +330,7 @@ public class SincronizarPostsHandbox extends HandboxConnections {
                                 "WHERE guid LIKE ('http://feeds.handbox.es%')";
                             insertV2(updateURLS);
                         }
+                        Thread.sleep(3000);
                     }
                     res.getMensajelog().addLinea(total + " actualizados");
                 }

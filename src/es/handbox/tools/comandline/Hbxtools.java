@@ -1,6 +1,7 @@
 package es.handbox.tools.comandline;
 
 import es.handbox.tools.pojo.Bloggers;
+import es.handbox.tools.pojo.CategorizadorHandbox;
 import es.handbox.tools.pojo.SincronizarPostsHandbox;
 
 public class Hbxtools {
@@ -10,7 +11,7 @@ public class Hbxtools {
 
     public static void main(String[] args) {
         args=new String[1];
-        args[0]="SincronizarPosts";
+        args[0]="CategorizarVideo";
         
         String opcion = args[0];
         
@@ -21,10 +22,27 @@ public class Hbxtools {
         
         if (opcion.equalsIgnoreCase("SincronizarPosts")) {
             SincronizarPostsHandbox posts = new SincronizarPostsHandbox("v2tobeta");
-            posts.sincronizarPosts("10");
+            posts.sincronizarPosts("20");
         }
         
+        if (opcion.equalsIgnoreCase("CategorizarPost")) {
+            int idPost = 334447;
+            CategorizadorHandbox categorizador = new CategorizadorHandbox("beta");
+            categorizador.categorizarPostv1(idPost);
+        }
         
+        if (opcion.equalsIgnoreCase("CategorizarTodos")) {
+            int limite = 10;
+            int idInicial = 334441;
+            CategorizadorHandbox categorizador = new CategorizadorHandbox("beta");
+            categorizador.categorizarTodos(idInicial, limite);
+        }
+        
+        if (opcion.equalsIgnoreCase("CategorizarVideo")) {
+                  CategorizadorHandbox cat = new CategorizadorHandbox("v2");
+                
+                  cat.establecercategoríadevideo();
+              }
         
     }
 }
