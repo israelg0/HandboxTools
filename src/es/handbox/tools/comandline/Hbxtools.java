@@ -10,9 +10,11 @@ public class Hbxtools {
     }
 
     public static void main(String[] args) {
-        args=new String[1];
+        args=new String[2];
         args[0]="CategorizarVideo";
-        
+        args[1]=""; //Sentido v2tobeta,feedstov2, beta, v2...
+        args[2]=""; //Numero de posts a tratar
+        args[3]="";//offset de categorizar todos.
         String opcion = args[0];
         
         if (opcion.equalsIgnoreCase("SincronizarUsuarios")) {
@@ -39,7 +41,7 @@ public class Hbxtools {
         }
         
         if (opcion.equalsIgnoreCase("CategorizarVideo")) {
-                  CategorizadorHandbox cat = new CategorizadorHandbox("v2");
+                  CategorizadorHandbox cat = new CategorizadorHandbox("beta");
                 
                   cat.establecercategoríadevideo();
               }

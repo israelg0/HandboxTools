@@ -397,7 +397,17 @@ public class CategorizadorHandbox extends HandboxConnections {
                 if ((esVideo > 0)&&!(yatieneVideo > 0 ))
                 {
                         try {          
-                             int  idVideo = 18380;
+                             int  idVideo = 0;//18368;//18380;//18368
+                                     
+                                  
+                              //Obtengo el id de la categoria video;
+                             query = "select t.term_taxonomy_id id " + 
+                             "from " + PREFIJOV2 + "term_taxonomy t, " + PREFIJOV2 + "terms w " + 
+                             "where w.term_id = t.term_id and t.taxonomy='category' and w.name='Video'";
+                                  ResultSet categoriaVideo = selectV2(query);                         
+                                  if (categoriaVideo.next()) {
+                                       idVideo = categorias.getInt(1);
+                                  }   
                          
                              System.out.println(" POST CON VIDEO  "+ idPost);
                         String insert =
