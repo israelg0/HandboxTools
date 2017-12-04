@@ -24,18 +24,63 @@ public class FeedTools  {
         super();
     }
 
+
+    @GET
+    @Produces("application/json ;charset=utf-8")
+    @Path("/sincronizarusuarios")
+    @SuppressWarnings("unchecked")
+    public String sincronizarUsuariosHandbox(@QueryParam("sentido") String sentido) {
+        
+        Respuesta respuesta  = new Respuesta();
+        Resultado res = Resultado.getResultado();
+        if (!res.isBloqueado())
+        {
+            try {
+                res.bloquear();
+                res.setOperacionEjecutada("sincronizarUsuariosHandbox");
+                res.getMensajelog().addLinea("El sentido es " + sentido);
+                ExecutorService servicio = Executors.newFixedThreadPool(1);
+                servicio.submit(new FeedsCallable("sincronizarUsuariosHandbox",sentido));
+    
+                respuesta.setCodigo("200");
+                respuesta.setMensaje("Sincronizacion en curso");
+                
+            } catch (Exception e) {
+                // TODO: Add catch code
+                res.desbloquear();
+                e.printStackTrace();
+            }
+        }else {
+            respuesta.setCodigo("601");
+            respuesta.setMensaje("Ya se esta ejecutando algun proceso. Por favor, espera unos minutos para volver a intentarlo");
+        }
+       
+       Gson gson = new Gson();
+       return gson.toJson(respuesta);
+    }
+    
+    
+    @GET
+    @Produces("application/json")
+    @Path("/numbloggers")
+    public String numBloggers(@QueryParam("entorno") String entorno) {
+       Bloggers bloggers = new Bloggers(entorno);
+       String resultado = bloggers.getNumBloggers();
+       return "{\"Respuesta\":{"+resultado+"}}";
+    }
+
     @GET
     @Produces("application/json")
     @Path("/bloggerssinfeed")
-    public String bloggersSinFeed() {
+    public String bloggersSinFeed(@QueryParam("entorno") String entorno) {
         Respuesta respuesta  = new Respuesta();
         Resultado res = Resultado.getResultado();
         if (!res.isBloqueado())
         {
             res.bloquear();
-            res.setOperacionEjecutada("bloggersSinFeed");
+            res.setOperacionEjecutada("bloggersSinFeed " + entorno);
             ExecutorService servicio = Executors.newFixedThreadPool(1);
-            servicio.submit(new FeedsCallable("bloggersSinFeed"));
+            servicio.submit(new FeedsCallable("bloggersSinFeed", entorno));
             respuesta.setCodigo("200");
             respuesta.setMensaje("Obteniendo Bloggers sin Feed");
            
@@ -52,15 +97,15 @@ public class FeedTools  {
     @GET
     @Produces("application/json")
     @Path("/sincronizarentradas")
-    public String sincronizarEntradas(@QueryParam("limite") int limite) {
+    public String sincronizarEntradas(@QueryParam("sentido") String sentido, @QueryParam("limite") int limite) {
         Respuesta respuesta  = new Respuesta();
         Resultado res = Resultado.getResultado();
         if (!res.isBloqueado())
         {
             res.bloquear();            
-            res.setOperacionEjecutada("sincronizarEntradas " + limite);
+            res.setOperacionEjecutada("sincronizarEntradas " + sentido + " " + limite);
             ExecutorService servicio = Executors.newFixedThreadPool(1);
-            servicio.submit(new FeedsCallable("sincronizarEntradas", limite+""));
+            servicio.submit(new FeedsCallable("sincronizarEntradas", sentido,  limite+""));
             respuesta.setCodigo("200");
             respuesta.setMensaje("Sincronización en curso");
             res.desbloquear();
@@ -72,8 +117,82 @@ public class FeedTools  {
        Gson gson = new Gson();
        return gson.toJson(respuesta);
     }
-
-
+    
+    
+    @GET
+    @Produces("application/json")
+    @Path("/categorizarentrada")
+    public String categorizarEntrada(@QueryParam("entorno") String entorno, @QueryParam("identrada") String identrada) {
+        Respuesta respuesta  = new Respuesta();
+        Resultado res = Resultado.getResultado();
+        if (!res.isBloqueado())
+        {
+            res.bloquear();            
+            res.setOperacionEjecutada("categorizarEntrada " + entorno + " " + identrada);
+            ExecutorService servicio = Executors.newFixedThreadPool(1);
+            servicio.submit(new FeedsCallable("categorizarEntrada", entorno, identrada));
+            respuesta.setCodigo("200");
+            respuesta.setMensaje("Categorización en curso");
+            res.desbloquear();
+        }else {
+            respuesta.setCodigo("601");
+            respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
+        }
+       
+       Gson gson = new Gson();
+       return gson.toJson(respuesta);
+    }
+    
+    @GET
+    @Produces("application/json")
+    @Path("/categorizartodas")
+    public String categorizarTodos(@QueryParam("entorno") String entorno,@QueryParam("limite") String limite, @QueryParam("identrada") String identrada) {
+        Respuesta respuesta  = new Respuesta();
+        Resultado res = Resultado.getResultado();
+        if (!res.isBloqueado())
+        {
+            res.bloquear();            
+            res.setOperacionEjecutada("categorizarTodas " + entorno + " " + limite + " " + identrada);
+            ExecutorService servicio = Executors.newFixedThreadPool(1);
+            servicio.submit(new FeedsCallable("categorizarTodas", entorno,limite, identrada));
+            respuesta.setCodigo("200");
+            respuesta.setMensaje("Categorización en curso");
+            res.desbloquear();
+        }else {
+            respuesta.setCodigo("601");
+            respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
+        }
+       
+       Gson gson = new Gson();
+       return gson.toJson(respuesta);
+    }
+    
+    @GET
+    @Produces("application/json")
+    @Path("/CategorizarVideo")
+    public String categorizarVideo(@QueryParam("sentido") int sentido) {
+        Respuesta respuesta  = new Respuesta();
+        Resultado res = Resultado.getResultado();
+        if (!res.isBloqueado())
+        {
+            res.bloquear();            
+            res.setOperacionEjecutada("categorizarVideo " + sentido);
+            ExecutorService servicio = Executors.newFixedThreadPool(1);
+            servicio.submit(new FeedsCallable("categorizarVideo", limite+""));
+            respuesta.setCodigo("200");
+            respuesta.setMensaje("Sincronización en curso");
+            res.desbloquear();
+        }else {
+            respuesta.setCodigo("601");
+            respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
+        }
+       
+       Gson gson = new Gson();
+       return gson.toJson(respuesta);
+    }
+    
+    
+    
     @GET
     @Produces("application/json")
     @Path("/verresultados")

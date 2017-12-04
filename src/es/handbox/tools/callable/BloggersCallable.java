@@ -17,10 +17,7 @@ public class BloggersCallable implements Callable {
 
     @Override
     public Object call() throws Exception {
-        if (metodo.equals("sincronizarUsuariosHandbox")) {
-            Bloggers bloggers = new Bloggers("hbx2feeds");
-            bloggers.sincronizarUsuariosHandbox();
-        }
+        
         if (metodo.equals("testDeHilos")) {
             Bloggers bloggers = new Bloggers();
             bloggers.testDeHilos();

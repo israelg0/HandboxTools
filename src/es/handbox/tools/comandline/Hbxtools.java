@@ -17,34 +17,71 @@ public class Hbxtools {
         args[3]="";//offset de categorizar todos.
         String opcion = args[0];
         
+        if (opcion.equalsIgnoreCase("SincronizarUsuariosBeta")) {
+            
+            if (args.length<2)
+                System.out.println("USO: SincronizarUsuariosBeta Sentido(v2toBeta)");
+            else {
+                Bloggers blogger = new Bloggers(args[1]);  //v2tobeta
+                blogger.sincronizarUsuariosBeta(0);
+            }
+       }
+        
         if (opcion.equalsIgnoreCase("SincronizarUsuarios")) {
-            Bloggers blogger = new Bloggers("v2tobeta");
-            blogger.sincronizarUsuariosBeta(0);
+            
+            if (args.length<2)
+                System.out.println("USO: SincronizarUsuarios Sentido(v2toFeeds)");
+            else {
+                Bloggers blogger = new Bloggers(args[1]);  //v2tofeeds
+                blogger.sincronizarUsuariosHandbox();
+            }
         }
         
         if (opcion.equalsIgnoreCase("SincronizarPosts")) {
-            SincronizarPostsHandbox posts = new SincronizarPostsHandbox("v2tobeta");
-            posts.sincronizarPosts("20");
+            if (args.length<3)
+                System.out.println("USO: SincronizarPosts Sentido(v2tobeta) numMaxPosts");
+            else {
+                SincronizarPostsHandbox posts = new SincronizarPostsHandbox(args[1]);
+                posts.sincronizarPosts(args[2]);
+            }
         }
         
         if (opcion.equalsIgnoreCase("CategorizarPost")) {
-            int idPost = 334447;
-            CategorizadorHandbox categorizador = new CategorizadorHandbox("beta");
-            categorizador.categorizarPostv1(idPost);
+            if (args.length<3)
+                System.out.println("USO: CategorizarPost Entorno(v2|beta) idPost");
+            else {
+                int idPost = Integer.parseInt(args[2]);
+                CategorizadorHandbox categorizador = new CategorizadorHandbox(args[1]);
+                categorizador.categorizarPostv1(idPost);
+            }
         }
         
         if (opcion.equalsIgnoreCase("CategorizarTodos")) {
-            int limite = 10;
-            int idInicial = 334441;
-            CategorizadorHandbox categorizador = new CategorizadorHandbox("beta");
+            
+            if (args.length<4)
+                System.out.println("USO: CategorizarTodos Entorno(v2|beta) limite idInicial");
+            else {
+            int limite =  Integer.parseInt(args[2]);
+            int idInicial =  Integer.parseInt(args[3]);
+            CategorizadorHandbox categorizador = new CategorizadorHandbox(args[1]);
             categorizador.categorizarTodos(idInicial, limite);
+            }
         }
         
         if (opcion.equalsIgnoreCase("CategorizarVideo")) {
-                  CategorizadorHandbox cat = new CategorizadorHandbox("beta");
-                
-                  cat.establecercategoríadevideo();
+                  if (args.length<2)
+                      System.out.println("USO: CategorizarVideo Entorno(v2|beta)");  
+                  else
+                  {
+                    CategorizadorHandbox cat = new CategorizadorHandbox("beta");
+                    cat.establecercategoriadevideo();
+                  }
               }
+        if (opcion.equalsIgnoreCase("NumBloggers")) {
+            
+            Bloggers bloggers = new Bloggers();
+            bloggers.getNumBloggers();
+        }   
         
     }
 }

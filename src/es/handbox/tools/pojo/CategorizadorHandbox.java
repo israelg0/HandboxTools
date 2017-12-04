@@ -431,7 +431,7 @@ public class CategorizadorHandbox extends HandboxConnections {
             }
         }
 
-        public void establecercategoríadevideo() {
+        public void establecercategoriadevideo() {
             try {
                 String query = "select ID from " + PREFIJOV1 + "posts where post_type=\"post\" order by ID asc ";
 
