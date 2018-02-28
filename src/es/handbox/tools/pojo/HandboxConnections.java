@@ -22,6 +22,8 @@ public class HandboxConnections {
     protected static String PWDv2;// = "D13g0&Iv4n";
     protected static String DATABASEv2;// = "Handbox_Master_DB";
     protected static String PREFIJOV2;// = "wp_";
+    protected static String UPLOADSDIRv2; ///usr/share/nginx/www/wp-content/uploads/
+    protected static String RSYNCv2;   //feeds o root
 
     protected static String HOSTv1;// = "handbox.es";
     protected static String PORTv1;// = "3306";
@@ -29,6 +31,7 @@ public class HandboxConnections {
     protected static String PWDv1;// = "m3l4p3l4!";
     protected static String DATABASEv1;// = "Handbox_prod_db";
     protected static String PREFIJOV1;// = "handbox_";
+    protected static String UPLOADSDIRv1; ///var/www/wordpress/wp-content/uploads/
     
     protected static ArrayList<String> palabrasProhibidas;
     protected static ArrayList<String> palabrasNoCategorias;
@@ -63,13 +66,16 @@ public class HandboxConnections {
                         PWDv2 = prop.getProperty("PWDv2");//"D13g0&Iv4n";
                         DATABASEv2 = prop.getProperty("DATABASEv2");//"Handbox_Master_DB";
                         PREFIJOV2 = prop.getProperty("PREFIJOV2");//"Handbox_Master_DB";
-
+                        UPLOADSDIRv2 = prop.getProperty("UPLOADSDIRv2");
+                        RSYNCv2 = prop.getProperty("RSYNCv2","root");
+                    
                         HOSTv1 = prop.getProperty("HOSTv1");//"handbox.es";
                         PORTv1 = prop.getProperty("PORTv1");//"3306";
                         USERv1 = prop.getProperty("USERv1");//"lanoa";
                         PWDv1 = prop.getProperty("PWDv1");//"m3l4p3l4!";
                         DATABASEv1 = prop.getProperty("DATABASEv1");//"Handbox_prod_db";
-                        PREFIJOV1 = prop.getProperty("PREFIJOV1");    
+                        PREFIJOV1 = prop.getProperty("PREFIJOV1");  
+                        UPLOADSDIRv1 = prop.getProperty("UPLOADSDIRv1");
                             
                             
                         uriv1 = "jdbc:mysql://" + HOSTv1 + ":" + PORTv1 + "/" + DATABASEv1;

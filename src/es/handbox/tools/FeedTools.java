@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 
 import es.handbox.model.Respuesta;
 import es.handbox.model.Resultado;
-import es.handbox.tools.callable.BloggersCallable;
 import es.handbox.tools.callable.FeedsCallable;
 import es.handbox.tools.pojo.Bloggers;
-import es.handbox.tools.pojo.SincronizarPostsHandbox;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,14 +34,61 @@ public class FeedTools  {
         if (!res.isBloqueado())
         {
             try {
-                res.bloquear();
-                res.setOperacionEjecutada("sincronizarUsuariosHandbox");
-                res.getMensajelog().addLinea("El sentido es " + sentido);
-                ExecutorService servicio = Executors.newFixedThreadPool(1);
-                servicio.submit(new FeedsCallable("sincronizarUsuariosHandbox",sentido));
+                if (sentido!=null)
+                {
+                    res.bloquear();
+                    res.setOperacionEjecutada("sincronizarUsuariosHandbox");
+                    res.getMensajelog().addLinea("El sentido es " + sentido);
+                    ExecutorService servicio = Executors.newFixedThreadPool(1);
+                    servicio.submit(new FeedsCallable("sincronizarUsuariosHandbox",sentido));
+                    respuesta.setCodigo("200");
+                    respuesta.setMensaje("Sincronizacion en curso");
+                }else{
+                     respuesta.setCodigo("701");
+                     respuesta.setMensaje("Parámetros incorrectos, necesarios sentido y limite ");
+                 }
+                
+            } catch (Exception e) {
+                // TODO: Add catch code
+                res.desbloquear();
+                e.printStackTrace();
+            }
+        }else {
+            respuesta.setCodigo("601");
+            respuesta.setMensaje("Ya se esta ejecutando algun proceso. Por favor, espera unos minutos para volver a intentarlo");
+        }
+       
+       Gson gson = new Gson();
+       return gson.toJson(respuesta);
+    }
     
-                respuesta.setCodigo("200");
-                respuesta.setMensaje("Sincronizacion en curso");
+    
+    @GET
+    @Produces("application/json ;charset=utf-8")
+    @Path("/sincronizarusuariosbeta")
+    @SuppressWarnings("unchecked")
+    public String sincronizarUsuariosHandbox(@QueryParam("sentido") String sentido,@QueryParam("limite") String limite) {
+        
+        Respuesta respuesta  = new Respuesta();
+        Resultado res = Resultado.getResultado();
+        if (!res.isBloqueado())
+        {
+            try {
+                res.bloquear();
+                res.setOperacionEjecutada("sincronizarUsuariosBeta");
+                res.getMensajelog().addLinea("El sentido es " + sentido);
+                if ((sentido!=null)&&(limite!=null))
+                {
+                    ExecutorService servicio = Executors.newFixedThreadPool(1);
+                    servicio.submit(new FeedsCallable("sincronizarUsuariosBeta",sentido,limite));
+                    respuesta.setCodigo("200");
+                    respuesta.setMensaje("Sincronizacion en curso");
+                }else{
+                     respuesta.setCodigo("701");
+                     respuesta.setMensaje("Parámetros incorrectos, necesarios sentido y limite ");
+                 }
+    
+                
                 
             } catch (Exception e) {
                 // TODO: Add catch code
@@ -64,9 +109,19 @@ public class FeedTools  {
     @Produces("application/json")
     @Path("/numbloggers")
     public String numBloggers(@QueryParam("entorno") String entorno) {
-       Bloggers bloggers = new Bloggers(entorno);
-       String resultado = bloggers.getNumBloggers();
-       return "{\"Respuesta\":{"+resultado+"}}";
+        Respuesta respuesta  = new Respuesta();
+        if (entorno!=null)
+        {
+           Bloggers bloggers = new Bloggers(entorno);
+           String resultado = bloggers.getNumBloggers();
+           respuesta.setCodigo("200"); 
+           respuesta.setMensaje("Respuesta:"+resultado);
+        }else{
+             respuesta.setCodigo("701");
+             respuesta.setMensaje("Parámetros incorrectos, necesario entorno ");
+         }
+        Gson gson = new Gson();
+        return gson.toJson(respuesta);
     }
 
     @GET
@@ -77,14 +132,19 @@ public class FeedTools  {
         Resultado res = Resultado.getResultado();
         if (!res.isBloqueado())
         {
-            res.bloquear();
-            res.setOperacionEjecutada("bloggersSinFeed " + entorno);
-            ExecutorService servicio = Executors.newFixedThreadPool(1);
-            servicio.submit(new FeedsCallable("bloggersSinFeed", entorno));
-            respuesta.setCodigo("200");
-            respuesta.setMensaje("Obteniendo Bloggers sin Feed");
-           
-            
+            if (entorno!=null)
+            {
+                res.bloquear();
+                res.setOperacionEjecutada("bloggersSinFeed " + entorno);
+                ExecutorService servicio = Executors.newFixedThreadPool(1);
+                servicio.submit(new FeedsCallable("bloggersSinFeed", entorno));
+                respuesta.setCodigo("200");
+                respuesta.setMensaje("Obteniendo Bloggers sin Feed");
+            }else{
+                 respuesta.setCodigo("701");
+                 respuesta.setMensaje("Parámetros incorrectos, necesario entorno ");
+             }
+             
         }else {
             respuesta.setCodigo("601");
             respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
@@ -97,18 +157,26 @@ public class FeedTools  {
     @GET
     @Produces("application/json")
     @Path("/sincronizarentradas")
-    public String sincronizarEntradas(@QueryParam("sentido") String sentido, @QueryParam("limite") int limite) {
+    public String sincronizarEntradas(@QueryParam("sentido") String sentido, @QueryParam("limite") String limite) {
         Respuesta respuesta  = new Respuesta();
         Resultado res = Resultado.getResultado();
         if (!res.isBloqueado())
         {
-            res.bloquear();            
-            res.setOperacionEjecutada("sincronizarEntradas " + sentido + " " + limite);
-            ExecutorService servicio = Executors.newFixedThreadPool(1);
-            servicio.submit(new FeedsCallable("sincronizarEntradas", sentido,  limite+""));
-            respuesta.setCodigo("200");
-            respuesta.setMensaje("Sincronización en curso");
-            res.desbloquear();
+            
+            if ((sentido!=null)&&(limite!=null))
+            {
+                res.bloquear();            
+                res.setOperacionEjecutada("sincronizarEntradas " + sentido + " " + limite);
+                ExecutorService servicio = Executors.newFixedThreadPool(1);
+                servicio.submit(new FeedsCallable("sincronizarEntradas", sentido,  limite));
+                respuesta.setCodigo("200");
+                respuesta.setMensaje("Sincronización en curso");
+                res.desbloquear();
+            }else{
+                 respuesta.setCodigo("701");
+                 respuesta.setMensaje("Parámetros incorrectos, necesarios sentido y limite ");
+             }
+            
         }else {
             respuesta.setCodigo("601");
             respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
@@ -127,13 +195,20 @@ public class FeedTools  {
         Resultado res = Resultado.getResultado();
         if (!res.isBloqueado())
         {
-            res.bloquear();            
-            res.setOperacionEjecutada("categorizarEntrada " + entorno + " " + identrada);
-            ExecutorService servicio = Executors.newFixedThreadPool(1);
-            servicio.submit(new FeedsCallable("categorizarEntrada", entorno, identrada));
-            respuesta.setCodigo("200");
-            respuesta.setMensaje("Categorización en curso");
-            res.desbloquear();
+            
+            if ((entorno!=null)&&(identrada!=null))
+            {
+                res.bloquear();            
+                res.setOperacionEjecutada("categorizarEntrada " + entorno + " " + identrada);
+                ExecutorService servicio = Executors.newFixedThreadPool(1);
+                servicio.submit(new FeedsCallable("categorizarEntrada", entorno, identrada));
+                respuesta.setCodigo("200");
+                respuesta.setMensaje("Categorización en curso");
+                res.desbloquear();
+            }else{
+                 respuesta.setCodigo("701");
+                 respuesta.setMensaje("Parámetros incorrectos, necesarios entorno y identrada");
+             }
         }else {
             respuesta.setCodigo("601");
             respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
@@ -151,13 +226,19 @@ public class FeedTools  {
         Resultado res = Resultado.getResultado();
         if (!res.isBloqueado())
         {
-            res.bloquear();            
-            res.setOperacionEjecutada("categorizarTodas " + entorno + " " + limite + " " + identrada);
-            ExecutorService servicio = Executors.newFixedThreadPool(1);
-            servicio.submit(new FeedsCallable("categorizarTodas", entorno,limite, identrada));
-            respuesta.setCodigo("200");
-            respuesta.setMensaje("Categorización en curso");
-            res.desbloquear();
+            if ((entorno!=null)&&(identrada!=null)&&(limite!=null))
+            {
+                res.bloquear();            
+                res.setOperacionEjecutada("categorizarTodas " + entorno + " " + limite + " " + identrada);
+                ExecutorService servicio = Executors.newFixedThreadPool(1);
+                servicio.submit(new FeedsCallable("categorizarTodas", entorno,limite, identrada));
+                respuesta.setCodigo("200");
+                respuesta.setMensaje("Categorización en curso");
+                res.desbloquear();
+            }else{
+                 respuesta.setCodigo("701");
+                 respuesta.setMensaje("Parámetros incorrectos, necesarios entorno, identrada y limite");
+             }
         }else {
             respuesta.setCodigo("601");
             respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
@@ -170,18 +251,24 @@ public class FeedTools  {
     @GET
     @Produces("application/json")
     @Path("/CategorizarVideo")
-    public String categorizarVideo(@QueryParam("sentido") int sentido) {
+    public String categorizarVideo(@QueryParam("entorno") String entorno ) {
         Respuesta respuesta  = new Respuesta();
         Resultado res = Resultado.getResultado();
         if (!res.isBloqueado())
         {
-            res.bloquear();            
-            res.setOperacionEjecutada("categorizarVideo " + sentido);
-            ExecutorService servicio = Executors.newFixedThreadPool(1);
-            servicio.submit(new FeedsCallable("categorizarVideo", limite+""));
-            respuesta.setCodigo("200");
-            respuesta.setMensaje("Sincronización en curso");
-            res.desbloquear();
+                if (entorno!=null)
+                {
+                    res.bloquear();            
+                    res.setOperacionEjecutada("categorizarVideo " + entorno);
+                    ExecutorService servicio = Executors.newFixedThreadPool(1);
+                    servicio.submit(new FeedsCallable("categorizarVideo", entorno));
+                    respuesta.setCodigo("200");
+                    respuesta.setMensaje("Sincronización en curso");
+                    res.desbloquear();
+                }else {
+                    respuesta.setCodigo("701");
+                    respuesta.setMensaje("Parámetros incorrectos, necesario entorno");
+                }
         }else {
             respuesta.setCodigo("601");
             respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");

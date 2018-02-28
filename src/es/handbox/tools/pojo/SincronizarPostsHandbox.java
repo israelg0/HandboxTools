@@ -42,8 +42,8 @@ public class SincronizarPostsHandbox extends HandboxConnections {
             if (rsLastPostv2.next()) {
                 res.getMensajelog().addLinea("Comienza sincronizacion ");
                 res.getMensajelog().addLinea("Sincronizando imagenes ");
-                //Ejecuta el rsyn, no está fino, aun comentado.
-                //sincronizarImagenes();
+                //Ejecuta el rsync, en pruebas
+                sincronizarImagenes();
                 
                 //Muestro el post_title y el post_name
                 res.getMensajelog().addLinea(rsLastPostv2.getString(3).replaceAll("\"", "\\\\\'").replaceAll("\'", "\\\\\'"));
@@ -350,13 +350,13 @@ public class SincronizarPostsHandbox extends HandboxConnections {
     /**
      * Ejecuta el RSYNC, todavia no está fino, por eso aún no se utiliza.
      */
-    private void sincronizarImagenes() {
-    
+    public void sincronizarImagenes() {
+        Resultado res = Resultado.getResultado();
             try {
             Calendar cal = Calendar.getInstance();    
             int year = cal.get(Calendar.YEAR);    
-            ProcessBuilder probuilder = new ProcessBuilder("/bin/sh", "-c", "rsync -azp /var/www/wordpress/wp-content/uploads/"+year+"/* root@151.80.70.28:/usr/share/nginx/www/wp-content/uploads/"+year);
-            
+            ProcessBuilder probuilder = new ProcessBuilder("/bin/sh", "-c", "rsync -azp "+UPLOADSDIRv1+year+"/* "+RSYNCv2+"@"+HOSTv2+":"+UPLOADSDIRv2+year);
+            res.getMensajelog().addLinea("Sincronizando im�genes ");
             Process process = probuilder.start();
             BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
 

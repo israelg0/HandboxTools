@@ -56,6 +56,10 @@ public class FeedsCallable implements Callable {
             Bloggers bloggers = new Bloggers(sentido);
             bloggers.sincronizarUsuariosHandbox();
         }
+        if (metodo.equals("sincronizarUsuariosBeta")) {
+            Bloggers bloggers = new Bloggers(sentido);
+            bloggers.sincronizarUsuariosBeta(0);
+        }
         if (metodo.equals("bloggersSinFeed")) {
             Bloggers bloggers = new Bloggers(sentido);
             bloggers.bloggersSinFeed();
@@ -72,6 +76,10 @@ public class FeedsCallable implements Callable {
         if (metodo.equals("categorizarTodas")) {
             CategorizadorHandbox cat = new CategorizadorHandbox(sentido);
             cat.categorizarTodos(Integer.parseInt(idEntrada), Integer.parseInt(limite));
+        }
+        if (metodo.equals("categorizarVideo")) {
+            CategorizadorHandbox cat = new CategorizadorHandbox(sentido);
+            cat.categorizarVideo(Integer.parseInt(idEntrada));
         }
         Resultado.getResultado().desbloquear();
         return null;

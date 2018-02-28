@@ -11,7 +11,7 @@ public class Hbxtools {
 
     public static void main(String[] args) {
         args=new String[2];
-        args[0]="CategorizarVideo";
+        args[0]="";
         args[1]=""; //Sentido v2tobeta,feedstov2, beta, v2...
         args[2]=""; //Numero de posts a tratar
         args[3]="";//offset de categorizar todos.
@@ -43,6 +43,15 @@ public class Hbxtools {
             else {
                 SincronizarPostsHandbox posts = new SincronizarPostsHandbox(args[1]);
                 posts.sincronizarPosts(args[2]);
+            }
+        }
+        
+        if (opcion.equalsIgnoreCase("SincronizarImagenes")) {
+            if (args.length<3)
+                System.out.println("USO: SincronizarImagenes Sentido(v2tobeta)");
+            else {
+                SincronizarPostsHandbox posts = new SincronizarPostsHandbox(args[1]);
+                posts.sincronizarImagenes();
             }
         }
         

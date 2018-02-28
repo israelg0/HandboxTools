@@ -388,7 +388,8 @@ public class CategorizadorHandbox extends HandboxConnections {
                     if (categorias.getString(2).equalsIgnoreCase("Video"))
                     {
                         yatieneVideo++;
-                        System.out.println("Ya tiene video   ");
+                        Resultado.getResultado().getMensajelog().addLinea("Ya tiene video");
+                        
                     }
                 }
 
@@ -398,9 +399,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                 {
                         try {          
                              int  idVideo = 0;//18368;//18380;//18368
-                                     
-                                  
-                              //Obtengo el id de la categoria video;
+                             //Obtengo el id de la categoria video;
                              query = "select t.term_taxonomy_id id " + 
                              "from " + PREFIJOV2 + "term_taxonomy t, " + PREFIJOV2 + "terms w " + 
                              "where w.term_id = t.term_id and t.taxonomy='category' and w.name='Video'";
@@ -409,7 +408,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                                        idVideo = categorias.getInt(1);
                                   }   
                          
-                             System.out.println(" POST CON VIDEO  "+ idPost);
+                             Resultado.getResultado().getMensajelog().addLinea("POST CON VIDEO  "+ idPost);
                         String insert =
                             "INSERT INTO " + PREFIJOV2 +
                             "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES (" + idPost + ", " +
@@ -627,6 +626,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                                             "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
                                             idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                                         insertV1(insert);
+                                            Resultado.getResultado().getMensajelog().addLinea(idPost + ": " + tags.getInt(1));
                                         }
                                     }
                                     //OJO, AQUI METERIA LAS PALABRAS DE MAS DE 4 LETRAS QUE NO LO ESTEN YA COMO TAGS.
@@ -667,6 +667,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                                     "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " +
                                     idPost + ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
                                 insertV1(insert);
+                                    Resultado.getResultado().getMensajelog().addLinea(idPost + ": " + tags.getInt(1));
                                 }
                             }
                         } catch (SQLException sqle) {
@@ -678,14 +679,7 @@ public class CategorizadorHandbox extends HandboxConnections {
 
                     categorizarVideo(idPost);
 
-                    query =
-                        "select r.term_taxonomy_id id , w.name nombre from " + PREFIJOV1 + "term_relationships r, " +
-                        PREFIJOV1 + "term_taxonomy t, " + PREFIJOV1 + "terms w " + "where r.object_id =" + idPost + " " +
-                        "and r.term_taxonomy_id = t.term_taxonomy_id " + "and w.term_id = t.term_id " +
-                        "and t.taxonomy='category'";
-
-                    ResultSet categoriasFinales = selectV1(query);
-
+                    
                     //Borro categor�as principales
 
                     String delete =

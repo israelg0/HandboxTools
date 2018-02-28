@@ -505,7 +505,8 @@ public class Bloggers extends HandboxConnections {
                 
                 res += "\"Usuarios "+HOSTv1+" \":\""+rsq1.getInt(1)+"\",\n";
                 
-                res += "\"Usuarios "+HOSTv2+" \":\""+rsq2.getInt(1)+"\"\n";
+                if (!HOSTv1.equals(HOSTv2))
+                    res += "\"Usuarios "+HOSTv2+" \":\""+rsq2.getInt(1)+"\"\n";
                 
 
             }
