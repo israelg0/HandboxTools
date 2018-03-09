@@ -356,7 +356,7 @@ public class SincronizarPostsHandbox extends HandboxConnections {
             Calendar cal = Calendar.getInstance();    
             int year = cal.get(Calendar.YEAR);    
             ProcessBuilder probuilder = new ProcessBuilder("/bin/sh", "-c", "rsync -azp "+UPLOADSDIRv1+year+"/* "+RSYNCv2+"@"+HOSTv2+":"+UPLOADSDIRv2+year);
-            res.getMensajelog().addLinea("Sincronizando imágenes ");
+            res.getMensajelog().addLinea("Sincronizando imagenes ");
             Process process = probuilder.start();
             BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
 

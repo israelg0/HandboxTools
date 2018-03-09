@@ -45,7 +45,7 @@ public class FeedTools  {
                     respuesta.setMensaje("Sincronizacion en curso");
                 }else{
                      respuesta.setCodigo("701");
-                     respuesta.setMensaje("Parámetros incorrectos, necesarios sentido y limite ");
+                     respuesta.setMensaje("Parï¿½metros incorrectos, necesarios sentido y limite ");
                  }
                 
             } catch (Exception e) {
@@ -85,7 +85,7 @@ public class FeedTools  {
                     respuesta.setMensaje("Sincronizacion en curso");
                 }else{
                      respuesta.setCodigo("701");
-                     respuesta.setMensaje("Parámetros incorrectos, necesarios sentido y limite ");
+                     respuesta.setMensaje("Parï¿½metros incorrectos, necesarios sentido y limite ");
                  }
     
                 
@@ -118,7 +118,7 @@ public class FeedTools  {
            respuesta.setMensaje("Respuesta:"+resultado);
         }else{
              respuesta.setCodigo("701");
-             respuesta.setMensaje("Parámetros incorrectos, necesario entorno ");
+             respuesta.setMensaje("Parï¿½metros incorrectos, necesario entorno ");
          }
         Gson gson = new Gson();
         return gson.toJson(respuesta);
@@ -142,12 +142,12 @@ public class FeedTools  {
                 respuesta.setMensaje("Obteniendo Bloggers sin Feed");
             }else{
                  respuesta.setCodigo("701");
-                 respuesta.setMensaje("Parámetros incorrectos, necesario entorno ");
+                 respuesta.setMensaje("Parï¿½metros incorrectos, necesario entorno ");
              }
              
         }else {
             respuesta.setCodigo("601");
-            respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
+            respuesta.setMensaje("Ya se estï¿½ ejecutando algï¿½n proceso. Por favor, espera unos minutos para volver a intentarlo");
         }
        
        Gson gson = new Gson();
@@ -170,16 +170,16 @@ public class FeedTools  {
                 ExecutorService servicio = Executors.newFixedThreadPool(1);
                 servicio.submit(new FeedsCallable("sincronizarEntradas", sentido,  limite));
                 respuesta.setCodigo("200");
-                respuesta.setMensaje("Sincronización en curso");
+                respuesta.setMensaje("Sincronizaciï¿½n en curso");
                 res.desbloquear();
             }else{
                  respuesta.setCodigo("701");
-                 respuesta.setMensaje("Parámetros incorrectos, necesarios sentido y limite ");
+                 respuesta.setMensaje("Parï¿½metros incorrectos, necesarios sentido y limite ");
              }
             
         }else {
             respuesta.setCodigo("601");
-            respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
+            respuesta.setMensaje("Ya se estï¿½ ejecutando algï¿½n proceso. Por favor, espera unos minutos para volver a intentarlo");
         }
        
        Gson gson = new Gson();
@@ -203,15 +203,15 @@ public class FeedTools  {
                 ExecutorService servicio = Executors.newFixedThreadPool(1);
                 servicio.submit(new FeedsCallable("categorizarEntrada", entorno, identrada));
                 respuesta.setCodigo("200");
-                respuesta.setMensaje("Categorización en curso");
+                respuesta.setMensaje("Categorizaciï¿½n en curso");
                 res.desbloquear();
             }else{
                  respuesta.setCodigo("701");
-                 respuesta.setMensaje("Parámetros incorrectos, necesarios entorno y identrada");
+                 respuesta.setMensaje("Parï¿½metros incorrectos, necesarios entorno y identrada");
              }
         }else {
             respuesta.setCodigo("601");
-            respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
+            respuesta.setMensaje("Ya se estï¿½ ejecutando algï¿½n proceso. Por favor, espera unos minutos para volver a intentarlo");
         }
        
        Gson gson = new Gson();
@@ -233,15 +233,15 @@ public class FeedTools  {
                 ExecutorService servicio = Executors.newFixedThreadPool(1);
                 servicio.submit(new FeedsCallable("categorizarTodas", entorno,limite, identrada));
                 respuesta.setCodigo("200");
-                respuesta.setMensaje("Categorización en curso");
+                respuesta.setMensaje("Categorizaciï¿½n en curso");
                 res.desbloquear();
             }else{
                  respuesta.setCodigo("701");
-                 respuesta.setMensaje("Parámetros incorrectos, necesarios entorno, identrada y limite");
+                 respuesta.setMensaje("Parï¿½metros incorrectos, necesarios entorno, identrada y limite");
              }
         }else {
             respuesta.setCodigo("601");
-            respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
+            respuesta.setMensaje("Ya se estï¿½ ejecutando algï¿½n proceso. Por favor, espera unos minutos para volver a intentarlo");
         }
        
        Gson gson = new Gson();
@@ -263,22 +263,59 @@ public class FeedTools  {
                     ExecutorService servicio = Executors.newFixedThreadPool(1);
                     servicio.submit(new FeedsCallable("categorizarVideo", entorno));
                     respuesta.setCodigo("200");
-                    respuesta.setMensaje("Sincronización en curso");
+                    respuesta.setMensaje("Sincronizaciï¿½n en curso");
                     res.desbloquear();
                 }else {
                     respuesta.setCodigo("701");
-                    respuesta.setMensaje("Parámetros incorrectos, necesario entorno");
+                    respuesta.setMensaje("Parï¿½metros incorrectos, necesario entorno");
                 }
         }else {
             respuesta.setCodigo("601");
-            respuesta.setMensaje("Ya se está ejecutando algún proceso. Por favor, espera unos minutos para volver a intentarlo");
+            respuesta.setMensaje("Ya se estï¿½ ejecutando algï¿½n proceso. Por favor, espera unos minutos para volver a intentarlo");
         }
        
        Gson gson = new Gson();
        return gson.toJson(respuesta);
     }
     
-    
+    @GET
+    @Produces("application/json ;charset=utf-8")
+    @Path("/sincronizarimagenes")
+    @SuppressWarnings("unchecked")
+    public String sincronizarImagenes(@QueryParam("sentido") String sentido) {
+        
+        Respuesta respuesta  = new Respuesta();
+        Resultado res = Resultado.getResultado();
+        if (!res.isBloqueado())
+        {
+            try {
+                if (sentido!=null)
+                {
+                    res.bloquear();
+                    res.setOperacionEjecutada("sincronizarImagenes");
+                    res.getMensajelog().addLinea("El sentido es " + sentido);
+                    ExecutorService servicio = Executors.newFixedThreadPool(1);
+                    servicio.submit(new FeedsCallable("sincronizarImagenes",sentido));
+                    respuesta.setCodigo("200");
+                    respuesta.setMensaje("Sincronizacion en curso");
+                }else{
+                     respuesta.setCodigo("701");
+                     respuesta.setMensaje("Parametros incorrectos, necesario sentido");
+                 }
+                
+            } catch (Exception e) {
+                // TODO: Add catch code
+                res.desbloquear();
+                e.printStackTrace();
+            }
+        }else {
+            respuesta.setCodigo("601");
+            respuesta.setMensaje("Ya se esta ejecutando algun proceso. Por favor, espera unos minutos para volver a intentarlo");
+        }
+       
+       Gson gson = new Gson();
+       return gson.toJson(respuesta);
+    }
     
     @GET
     @Produces("application/json")
