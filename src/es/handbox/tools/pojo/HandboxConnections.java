@@ -22,6 +22,7 @@ public class HandboxConnections {
     protected static String PWDv2;// = "D13g0&Iv4n";
     protected static String DATABASEv2;// = "Handbox_Master_DB";
     protected static String PREFIJOV2;// = "wp_";
+    protected static String UPLOADSHOSTv2; ///usr/share/nginx/www/wp-content/uploads/
     protected static String UPLOADSDIRv2; ///usr/share/nginx/www/wp-content/uploads/
     protected static String RSYNCv2;   //feeds o root
 
@@ -66,6 +67,7 @@ public class HandboxConnections {
                         PWDv2 = prop.getProperty("PWDv2");//"D13g0&Iv4n";
                         DATABASEv2 = prop.getProperty("DATABASEv2");//"Handbox_Master_DB";
                         PREFIJOV2 = prop.getProperty("PREFIJOV2");//"Handbox_Master_DB";
+                        UPLOADSHOSTv2 = prop.getProperty("UPLOADSHOSTv2");
                         UPLOADSDIRv2 = prop.getProperty("UPLOADSDIRv2");
                         RSYNCv2 = prop.getProperty("RSYNCv2","root");
                     

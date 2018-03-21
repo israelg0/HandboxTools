@@ -4,17 +4,20 @@ import es.handbox.tools.pojo.Bloggers;
 import es.handbox.tools.pojo.CategorizadorHandbox;
 import es.handbox.tools.pojo.SincronizarPostsHandbox;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 public class Hbxtools {
     public Hbxtools() {
         super();
     }
 
     public static void main(String[] args) {
-        args=new String[2];
-        args[0]="";
-        args[1]=""; //Sentido v2tobeta,feedstov2, beta, v2...
-        args[2]=""; //Numero de posts a tratar
-        args[3]="";//offset de categorizar todos.
+        //args=new String[2];
+        //args[0]="";
+        //args[1]=""; //Sentido v2tobeta,feedstov2, beta, v2...
+        //args[2]=""; //Numero de posts a tratar
+        //args[3]="";//offset de categorizar todos.
         String opcion = args[0];
         
         if (opcion.equalsIgnoreCase("SincronizarUsuariosBeta")) {
@@ -47,7 +50,7 @@ public class Hbxtools {
         }
         
         if (opcion.equalsIgnoreCase("SincronizarImagenes")) {
-            if (args.length<3)
+            if (args.length<2)
                 System.out.println("USO: SincronizarImagenes Sentido(v2tobeta)");
             else {
                 SincronizarPostsHandbox posts = new SincronizarPostsHandbox(args[1]);
@@ -87,10 +90,39 @@ public class Hbxtools {
                   }
               }
         if (opcion.equalsIgnoreCase("NumBloggers")) {
-            
-            Bloggers bloggers = new Bloggers();
-            bloggers.getNumBloggers();
+            if (args.length<2)
+                System.out.println("USO: NumBloggers Sentido(feeds2v2)");  
+                else
+                {
+            Bloggers bloggers = new Bloggers(args[1]);
+            System.out.println(bloggers.getNumBloggers());
+                }
         }   
+        
+        if (opcion.equalsIgnoreCase("Hola")) {
+            Calendar calendario = new GregorianCalendar();
+            int hora =calendario.get(Calendar.HOUR_OF_DAY);
+            String saludo = "Buenos días";
+            if ((hora>12)&&(hora<21))
+                saludo = "Buenas tardes";
+            if ((hora>20)&&(hora<6))
+                saludo = "Buenas noches";
+            System.out.println(saludo + ", todo preparado");
+            System.out.println("Comandos:");
+            System.out.println("SincronizarUsuariosBeta Sentido");
+            System.out.println("SincronizarUsuarios Sentido");
+            System.out.println("SincronizarPosts Sentido numMaxPosts");
+            System.out.println("SincronizarImagenes Sentido");
+            System.out.println("CategorizarPost Entorno(v2|beta) idPost");
+            System.out.println("CategorizarTodos Entorno(v2|beta) limite idInicial");
+            System.out.println("CategorizarVideo Entorno(v2|beta)");   
+            System.out.println("NumBloggers");
+        
+        
+        
+        
+        
+        }  
         
     }
 }

@@ -351,25 +351,33 @@ public class SincronizarPostsHandbox extends HandboxConnections {
      * Ejecuta el RSYNC, todavia no está fino, por eso aún no se utiliza.
      */
     public void sincronizarImagenes() {
-        Resultado res = Resultado.getResultado();
-            try {
-            Calendar cal = Calendar.getInstance();    
-            int year = cal.get(Calendar.YEAR);    
-            ProcessBuilder probuilder = new ProcessBuilder("/bin/sh", "-c", "rsync -azp "+UPLOADSDIRv1+year+"/* "+RSYNCv2+"@"+HOSTv2+":"+UPLOADSDIRv2+year);
-            res.getMensajelog().addLinea("Sincronizando imagenes ");
-            Process process = probuilder.start();
-            BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ie) {
-                // TODO: Add catch code
-                ie.printStackTrace();
+            Resultado res = Resultado.getResultado();
+            if ((RSYNCv2!=null)&&(!RSYNCv2.equals("")))
+            {
+                try {
+                Calendar cal = Calendar.getInstance();    
+                int year = cal.get(Calendar.YEAR); 
+                    String lhostv2 = HOSTv2;
+                if ((UPLOADSHOSTv2!=null)&&(!UPLOADSHOSTv2.equals(""))) {
+                    lhostv2 = UPLOADSHOSTv2;
+                }
+                ProcessBuilder probuilder = new ProcessBuilder("/bin/sh", "-c", "rsync -azp "+UPLOADSDIRv1+year+"/* "+RSYNCv2+"@"+lhostv2+":"+UPLOADSDIRv2+year);
+                res.getMensajelog().addLinea("Sincronizando imagenes ");
+                res.getMensajelog().addLinea("rsync -azp "+UPLOADSDIRv1+year+"/* "+RSYNCv2+"@"+lhostv2+":"+UPLOADSDIRv2+year);
+                Process process = probuilder.start();
+                BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ie) {
+                    // TODO: Add catch code
+                    ie.printStackTrace();
+                }
+                } catch (IOException ioe) {
+                    // TODO: Add catch code
+                    ioe.printStackTrace();
+                }
             }
-        } catch (IOException ioe) {
-            // TODO: Add catch code
-            ioe.printStackTrace();
-        }
         
     }
 }
