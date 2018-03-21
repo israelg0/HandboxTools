@@ -65,9 +65,13 @@ public class FeedsCallable implements Callable {
             bloggers.bloggersSinFeed();
         }
         if (metodo.equals("sincronizarEntradas")) {
-            SincronizarPostsHandbox sph = new SincronizarPostsHandbox();
+            SincronizarPostsHandbox sph = new SincronizarPostsHandbox(sentido);
             if (limite.equals("")) limite = "5";
             sph.sincronizarPosts(limite);
+        }
+        if (metodo.equals("sincronizarImagenes")) {
+            SincronizarPostsHandbox sph = new SincronizarPostsHandbox(sentido);
+            sph.sincronizarImagenes();
         }
         if (metodo.equals("categorizarEntrada")) {
             CategorizadorHandbox cat = new CategorizadorHandbox(sentido);
