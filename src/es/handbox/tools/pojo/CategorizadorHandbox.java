@@ -492,15 +492,17 @@ public class CategorizadorHandbox extends HandboxConnections {
                             }
                             //Del titulo saco categorias o etiquetas
                             palabras = post.getString(1).split("[[ ]*|[,]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
+                            Resultado.getResultado().getMensajelog().addLinea(idPost + ": Revisando título");
                             for (int i = 0; i < palabras.length; i++) {
-
+                                Resultado.getResultado().getMensajelog().addLinea(idPost + ": " + palabras[i]);
                                     if (this.esPalabraCategorizable(palabras[i])) {
+                                        Resultado.getResultado().getMensajelog().addLinea(idPost + ": " + palabras[i] + " Categorizable");
                                             query =
                                                     "select x.term_taxonomy_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 +
                                                     "term_taxonomy x " +
                                                     "where (x.taxonomy='category' or x.taxonomy='post_tag') and x.term_id = t.term_id " +
                                                     "and (t.name = '" + palabras[i] + "' or t.slug='" + palabras[i] + "')";
-
+                                        Resultado.getResultado().getMensajelog().addLinea(idPost + ": " + query);
                                             try {
                                                     ResultSet tags = selectV1(query);
                                                     while (tags.next()) {
