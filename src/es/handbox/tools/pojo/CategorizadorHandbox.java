@@ -414,7 +414,7 @@ public class CategorizadorHandbox extends HandboxConnections {
             for (int j = 0; j < HandboxConnections.palabrasNoCategorias.size(); j++) {
 
                 if (palabra.equalsIgnoreCase(HandboxConnections.palabrasNoCategorias.get(j))) {
-                    Resultado.getResultado().getMensajelog().addLinea(palabra + " No categorizable");
+                    //Resultado.getResultado().getMensajelog().addLinea(palabra + " No categorizable");
                     return false;
                 }
             }
@@ -451,6 +451,7 @@ public class CategorizadorHandbox extends HandboxConnections {
                             String[] palabras =
                                     post.getString(2).replaceAll("\\<.*?>", "").split("[[ ]*|[,]*|[\"]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
                             HashMap words = new HashMap();
+                            Resultado.getResultado().getMensajelog().addLinea("Analizando texto... ");
                             for (int i = 0; i < palabras.length; i++) {
                             
                                     if (esPalabraCategorizable(palabras[i]))
@@ -464,8 +465,11 @@ public class CategorizadorHandbox extends HandboxConnections {
                                     }
                             }
                             //En este punto tengo las palabras del tutorial con el numero de repeticiones.
+                            Resultado.getResultado().getMensajelog().addLinea(". ");
                             ArrayList<String> keys = new ArrayList<String>(words.keySet());
+                        Resultado.getResultado().getMensajelog().addLinea(keys.size()+" palabras a analizar");
                             for (String key : keys) {
+                                Resultado.getResultado().getMensajelog().addLinea(". " + key);
                                     //Si es mayor que 1 y la palabra es mayor de 3 (¿no me lo puedo ahorrar esto ultimo?)
                                     if ((Integer.parseInt((String) words.get(key)) > 1) && this.esPalabraCategorizable(key)) {
                                             //compruebo si hay alguna categoria que coincida con la palabra.
@@ -591,10 +595,11 @@ public class CategorizadorHandbox extends HandboxConnections {
                     insertV1(delete);
             } catch (SQLException sqle) {
                     // TODO: Add catch code
+                sqle.printStackTrace();
                     
             } catch (NumberFormatException nfe) {
                     // TODO: Add catch code
-                    
+                    nfe.printStackTrace();
             }
             }
     
