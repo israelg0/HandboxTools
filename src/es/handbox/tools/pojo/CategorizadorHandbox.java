@@ -445,13 +445,13 @@ public class CategorizadorHandbox extends HandboxConnections {
                     String query = "SELECT  post_title,post_content FROM " + PREFIJOV1 + "posts where ID='" + idPost + "'";
                     ResultSet post = selectV1(query);
                     if (post.next()) {
-                            Resultado.getResultado().getMensajelog().addLinea("Categorizando "+post.getString(1));
+                            Resultado.getResultado().getMensajelog().addLinea(idPost + ": Categorizando "+post.getString(1));
                             //Del texto, sacamos las palabras, las contamos, si estan 2 veces repetidas miramos si son categoria.
                             //Si tienen mas de 3 letras pero no se repite lo comparo con las etiquetas unicamente.
                             String[] palabras =
                                     post.getString(2).replaceAll("\\<.*?>", "").split("[[ ]*|[,]*|[\"]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
                             HashMap words = new HashMap();
-                            Resultado.getResultado().getMensajelog().addLinea("Analizando texto... ");
+                            Resultado.getResultado().getMensajelog().addLinea(idPost + ": "+" Analizando texto----------------------------------------- ");
                             for (int i = 0; i < palabras.length; i++) {
                             
                                     if (esPalabraCategorizable(palabras[i]))
@@ -467,36 +467,36 @@ public class CategorizadorHandbox extends HandboxConnections {
                             //En este punto tengo las palabras del tutorial con el numero de repeticiones.
                             Resultado.getResultado().getMensajelog().addLinea(". ");
                             ArrayList<String> keys = new ArrayList<String>(words.keySet());
-                        Resultado.getResultado().getMensajelog().addLinea(keys.size()+" palabras a analizar");
+                            Resultado.getResultado().getMensajelog().addLinea(idPost + ": " + keys.size()+" palabras a analizar");
                             for (String key : keys) {
-                                Resultado.getResultado().getMensajelog().addLinea(". " + key);
+                                
                                     //Si es mayor que 1 y la palabra es mayor de 3 (Â¿no me lo puedo ahorrar esto ultimo?)
                                     if ((Integer.parseInt((String) words.get(key)) > 1) && this.esPalabraCategorizable(key)) {
                                             //compruebo si hay alguna categoria que coincida con la palabra.
+                                            Resultado.getResultado().getMensajelog().addLinea(idPost + ": -" + key +" puede ser categoria");
                                             query =
                                                     "select x.term_taxonomy_id from " + PREFIJOV1 + "terms t, " + PREFIJOV1 +
                                                     "term_taxonomy x " + "where x.taxonomy='category' and x.term_id = t.term_id " +
                                                     "and (t.name = '" + key + "' or t.slug='" + key + "')";
-                                            
                                             ResultSet tags = selectV1(query);
-                                            if (!tieneLaCategoria(idPost, tags.getInt(1))) {
-                                                    while (tags.next()) {
-                                                            //tag o categoria
-                                                            if (!tieneLaCategoria(idPost, tags.getInt(1))) {
-                                                            String insert =
-                                                                    "INSERT INTO " + PREFIJOV1 +
-                                                                    "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " + idPost +
-                                                                    ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
-                                                            insertV1(insert);
-                                                       Resultado.getResultado().getMensajelog().addLinea(key + ": " + words.get(key) + " cate");
-                                                            }
+                                            while (tags.next()) {
+                                                    Resultado.getResultado().getMensajelog().addLinea(idPost + ": --Es tag o categoría");
+                                                    //tag o categoria
+                                                    if (!tieneLaCategoria(idPost, tags.getInt(1))) {
+                                                    String insert =
+                                                            "INSERT INTO " + PREFIJOV1 +
+                                                            "term_relationships ( object_id, term_taxonomy_id, term_order ) VALUES ( " + idPost +
+                                                            ", " + tags.getInt(1) + ", 0 )"; //,$res->object_id, $i->term_id, 0 ) );
+                                                    insertV1(insert);
+                                               Resultado.getResultado().getMensajelog().addLinea(idPost + ": " + key + ": " + tags.getInt(1));
                                                     }
                                             }
+                                            
                                     } 
                             }
                             //Del titulo saco categorias o etiquetas
                             palabras = post.getString(1).split("[[ ]*|[,]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*]+");
-                            Resultado.getResultado().getMensajelog().addLinea(idPost + ": Revisando título");
+                            Resultado.getResultado().getMensajelog().addLinea(idPost + ": Revisando título-----------------------------------------------");
                             for (int i = 0; i < palabras.length; i++) {
                                 Resultado.getResultado().getMensajelog().addLinea(idPost + ": " + palabras[i]);
                                     if (this.esPalabraCategorizable(palabras[i])) {
@@ -506,7 +506,6 @@ public class CategorizadorHandbox extends HandboxConnections {
                                                     "term_taxonomy x " +
                                                     "where (x.taxonomy='category' or x.taxonomy='post_tag') and x.term_id = t.term_id " +
                                                     "and (t.name = '" + palabras[i] + "' or t.slug='" + palabras[i] + "')";
-                                        Resultado.getResultado().getMensajelog().addLinea(idPost + ": " + query);
                                             try {
                                                     ResultSet tags = selectV1(query);
                                                     while (tags.next()) {
